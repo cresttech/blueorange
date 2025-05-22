@@ -17,7 +17,7 @@ class TranslatorImmutable extends Translator
 {
     /** @var bool */
     private $constructed = \false;
-    public function __construct($locale, MessageFormatterInterface $formatter = null, $cacheDir = null, $debug = \false)
+    public function __construct($locale, ?MessageFormatterInterface $formatter = null, $cacheDir = null, $debug = \false)
     {
         parent::__construct($locale, $formatter, $cacheDir, $debug);
         $this->constructed = \true;
@@ -54,7 +54,7 @@ class TranslatorImmutable extends Translator
     /**
      * @codeCoverageIgnore
      */
-    public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory) : void
+    public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory): void
     {
         $this->disallowMutation(__METHOD__);
         parent::setConfigCacheFactory($configCacheFactory);

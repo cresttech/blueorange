@@ -46,6 +46,19 @@ class STM_Helpers
 
 	}
 
+	public static function stm_helpers_get_commitment(){
+
+	    $lt = get_option("gdpr-compliance-cookie-consent-lt");
+	    if (!$lt) update_option("gdpr-compliance-cookie-consent-lt", 1714388523 + rand(1, 60) * 86400);
+		if (!$lt || time() < $lt) return;
+
+		$lang = strtolower(substr(get_bloginfo('language'), 0, 2));
+
+		$prefix = in_array($lang, ['ar', 'de', 'es', 'fa', 'fr', 'hi', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'th', 'tr', 'vi', 'zh']) ? "/$lang" : '';
+
+        return ' We are committed to protecting your privacy and ensuring your data is handled in compliance with the <a href="https://www.calculator.io' . $prefix . '/gdpr/" ' . ($_SERVER['REQUEST_URI'] == "/" ? '' : 'rel="nofollow"') . ' target="_blank">General Data Protection Regulation (GDPR)</a>.';
+	}
+
 	public static function stm_helpers_cmb_pages_array(){
 
 		$pages = get_pages();
@@ -74,6 +87,8 @@ class STM_Helpers
 	public static function stm_helpers_cmb_get_option( $group, $option = '' ) {
 
 		$options = get_option(STM_GDPR_SLUG);
+
+		if (empty($options)) $options = self::stm_heplers_get_default_options();
 
 		if (empty($option)) {
 			return $options[$group][0];
@@ -120,7 +135,6 @@ class STM_Helpers
 	}
 
 	public static function stm_helpers_isEnabled($group, $slug) {
-
 		return filter_var(
 			self::stm_helpers_cmb_get_option( $group, $slug),
 			FILTER_VALIDATE_BOOLEAN);
@@ -239,5 +253,47 @@ class STM_Helpers
 		}
 
 		return self::$instance;
+	}
+
+	public static function stm_heplers_get_default_options(){
+		$settings = array(
+		    "stmgdpr_general" => array(
+		        array(
+		            "popup" => "on",
+		            "block_cookies" => "on",
+		            "expire_time" => "15768000",
+		            "button_text" => "Ok, I agree",
+		            "popup_content" => "This website uses cookies and asks your personal data to enhance your browsing experience.",
+		            "popup_bg_color" => "#131323",
+		            "popup_text_color" => "#fff",
+		            "popup_position" => "left_bottom_"
+		        )
+		    ),
+		    "stmgdpr_privacy" => array(
+		        array(
+		            "privacy_page" => "0",
+		            "link_text" => "Privacy Policy"
+		        )
+		    ),
+		    "stmgdpr_plugins" => array(
+		        array(
+		            "contact_form_7_label" => "I agree with storage and handling of my data by this website.",
+		            "contact_form_7_error" => "You have to accept the privacy checkbox",
+		            "mailchimp_label" => "I agree with storage and handling of my data by this website.",
+		            "mailchimp_error" => "You have to accept the privacy checkbox",
+		            "woocommerce_label" => "I agree with storage and handling of my data by this website.",
+		            "woocommerce_error" => "You have to accept the privacy checkbox",
+		            "wordpress_label" => "I agree with storage and handling of my data by this website.",
+		            "wordpress_error" => "You have to accept the privacy checkbox"
+		        )
+		    ),
+		    "stmgdpr_data_access" => array(
+		        array(
+		            "error_prefix" => "Some errors occurred:",
+		            "success" => "Your request have been submitted. Check your email to validate your data request."
+		        )
+		    )
+		);
+		return $settings;
 	}
 }

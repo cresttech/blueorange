@@ -6,16 +6,19 @@ namespace Leadin\data;
  * Class that wraps the functions to access options related to the HubSpot account.
  */
 class Portal_Options {
-	const PORTAL_ID                 = LEADIN_PREFIX . '_portalId';
-	const PORTAL_DOMAIN             = LEADIN_PREFIX . '_portal_domain';
-	const ACCOUNT_NAME              = LEADIN_PREFIX . '_account_name';
-	const HUBLET                    = LEADIN_PREFIX . '_hublet';
-	const DISABLE_INTERNAL_TRACKING = LEADIN_PREFIX . '_disable_internal_tracking';
-	const ACTIVATION_TIME           = LEADIN_PREFIX . '_activation_time';
-	const ACCESS_TOKEN              = LEADIN_PREFIX . '_access_token';
-	const REFRESH_TOKEN             = LEADIN_PREFIX . '_refresh_token';
-	const EXPIRY_TIME               = LEADIN_PREFIX . '_expiry_time';
-	const BUSINESS_UNIT_ID          = LEADIN_PREFIX . '_business_unit_id';
+	const PORTAL_ID                             = LEADIN_PREFIX . '_portalId';
+	const PORTAL_DOMAIN                         = LEADIN_PREFIX . '_portal_domain';
+	const ACCOUNT_NAME                          = LEADIN_PREFIX . '_account_name';
+	const HUBLET                                = LEADIN_PREFIX . '_hublet';
+	const DISABLE_INTERNAL_TRACKING             = LEADIN_PREFIX . '_disable_internal_tracking';
+	const ACTIVATION_TIME                       = LEADIN_PREFIX . '_activation_time';
+	const REFRESH_TOKEN                         = LEADIN_PREFIX . '_refresh_token';
+	const BUSINESS_UNIT_ID                      = LEADIN_PREFIX . '_business_unit_id';
+	const LAST_AUTHORIZE_TIME                   = LEADIN_PREFIX . '_last_authorize_time';
+	const LAST_DEAUTHORIZE_TIME                 = LEADIN_PREFIX . '_last_deauthorize_time';
+	const LAST_DISCONNECT_TIME                  = LEADIN_PREFIX . '_last_disconnect_time';
+	const PROXY_MAPPING_ENABLED                 = LEADIN_PREFIX . '_proxy_mappings_enabled';
+	const DEFAULT_OPTION_PROXY_MAPPINGS_ENABLED = false;
 
 	/**
 	 * Return portal id.
@@ -154,29 +157,6 @@ class Portal_Options {
 	}
 
 	/**
-	 * Return access token.
-	 */
-	public static function get_access_token() {
-		return get_option( self::ACCESS_TOKEN );
-	}
-
-	/**
-	 * Set access token.
-	 *
-	 * @param string $access_token token.
-	 */
-	public static function set_access_token( $access_token ) {
-		return update_option( self::ACCESS_TOKEN, $access_token );
-	}
-
-	/**
-	 * Delete access token.
-	 */
-	public static function delete_access_token() {
-		return delete_option( self::ACCESS_TOKEN );
-	}
-
-	/**
 	 * Return refresh access token.
 	 */
 	public static function get_refresh_token() {
@@ -197,29 +177,6 @@ class Portal_Options {
 	 */
 	public static function delete_refresh_token() {
 		return delete_option( self::REFRESH_TOKEN );
-	}
-
-	/**
-	 * Return expiry time.
-	 */
-	public static function get_expiry_time() {
-		return get_option( self::EXPIRY_TIME );
-	}
-
-	/**
-	 * Set expiry time.
-	 *
-	 * @param string $expiry_time time.
-	 */
-	public static function set_expiry_time( $expiry_time ) {
-		return update_option( self::EXPIRY_TIME, $expiry_time );
-	}
-
-	/**
-	 * Delete expiry time.
-	 */
-	public static function delete_expiry_time() {
-		return delete_option( self::EXPIRY_TIME );
 	}
 
 	/**
@@ -252,5 +209,77 @@ class Portal_Options {
 	 */
 	public static function delete_business_unit_id() {
 		return delete_option( self::BUSINESS_UNIT_ID );
+	}
+
+	/**
+	 * Set when last authorized.
+	 */
+	public static function set_last_authorize_time() {
+		return update_option( self::LAST_AUTHORIZE_TIME, time() );
+	}
+	/**
+	 * Set when last deauthorized.
+	 */
+	public static function set_last_deauthorize_time() {
+		return update_option( self::LAST_DEAUTHORIZE_TIME, time() );
+	}
+
+	/**
+	 * Set when last disconnect.
+	 */
+	public static function set_last_disconnect_time() {
+		return update_option( self::LAST_DISCONNECT_TIME, time() );
+	}
+
+	/**
+	 * Get the last time authorization was performed.
+	 *
+	 * @return mixed The last authorization time, or false if not set.
+	 */
+	public static function get_last_authorize_time() {
+		return get_option( self::LAST_AUTHORIZE_TIME, false );
+	}
+
+	/**
+	 * Get the last time deauthorization was performed.
+	 *
+	 * @return mixed The last deauthorization time, or false if not set.
+	 */
+	public static function get_last_deauthorize_time() {
+		return get_option( self::LAST_DEAUTHORIZE_TIME, false );
+	}
+
+	/**
+	 * Get the last time a disconnect was performed.
+	 *
+	 * @return mixed The last disconnect time, or false if not set.
+	 */
+	public static function get_last_disconnect_time() {
+		return get_option( self::LAST_DISCONNECT_TIME, false );
+	}
+
+	/**
+	 * Return option flag to enable/disable proxy mapping.
+	 *
+	 * @return bool Proxy mapping enabled flag.
+	 */
+	public static function get_proxy_mappings_enabled() {
+		return (bool) get_option( self::PROXY_MAPPING_ENABLED, self::DEFAULT_OPTION_PROXY_MAPPINGS_ENABLED );
+	}
+
+	/**
+	 * Set option flag to enable/disable proxy mapping.
+	 *
+	 * @param bool $enabled hublet.
+	 */
+	public static function set_proxy_mappings_enabled( $enabled = false ) {
+		return update_option( self::PROXY_MAPPING_ENABLED, $enabled );
+	}
+
+	/**
+	 * Delete option flag to enable/disable proxy mapping.
+	 */
+	public static function delete_proxy_mappings_enabled() {
+		return delete_option( self::PROXY_MAPPING_ENABLED );
 	}
 }

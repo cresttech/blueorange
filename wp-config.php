@@ -3,6 +3,7 @@
 <?php if ( !defined('JETPACK_STAGING_MODE') ) { define('JETPACK_STAGING_MODE', true); /* Kinsta development - don't remove this line */ } ?>
 <?php /* END KINSTA DEVELOPMENT ENVIRONMENT - DO NOT MODIFY THIS CODE BLOCK */ ?>
 <?php
+
 /**
  * The base configuration for WordPress
  *
@@ -96,7 +97,6 @@ if ( ! defined( 'WP_DEBUG' ) ) {
 }
 define( 'ALLOW_UNFILTERED_UPLOADS', true );
 /* That's all, stop editing! Happy publishing. */
-
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );

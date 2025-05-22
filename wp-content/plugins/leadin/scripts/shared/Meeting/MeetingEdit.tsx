@@ -11,10 +11,12 @@ import { refreshToken } from '../../constants/leadinConfig';
 import { ProxyMessages } from '../../iframe/integratedMessages';
 import LoadingBlock from '../Common/LoadingBlock';
 import { getOrCreateBackgroundApp } from '../../utils/backgroundAppUtils';
+import { isRefreshTokenAvailable } from '../../utils/isRefreshTokenAvailable';
 
 interface IMeetingEditProps extends IMeetingBlockProps {
   preview?: boolean;
   origin?: 'gutenberg' | 'elementor';
+  fullSiteEditor?: boolean;
 }
 
 function MeetingEdit({
@@ -23,6 +25,7 @@ function MeetingEdit({
   setAttributes,
   preview = true,
   origin = 'gutenberg',
+  fullSiteEditor,
 }: IMeetingEditProps) {
   const isBackgroundAppReady = useBackgroundAppContext();
   const monitorFormPreviewRender = usePostBackgroundMessage();
@@ -49,7 +52,9 @@ function MeetingEdit({
       {(isSelected || !url) && (
         <MeetingController url={url} handleChange={handleChange} />
       )}
-      {preview && url && <PreviewMeeting url={url} />}
+      {preview && url && (
+        <PreviewMeeting url={url} fullSiteEditor={fullSiteEditor} />
+      )}
     </Fragment>
   );
 }
@@ -57,7 +62,9 @@ function MeetingEdit({
 export default function MeetingsEditContainer(props: IMeetingEditProps) {
   return (
     <BackgroudAppContext.Provider
-      value={refreshToken && getOrCreateBackgroundApp(refreshToken)}
+      value={
+        isRefreshTokenAvailable() && getOrCreateBackgroundApp(refreshToken)
+      }
     >
       <MeetingEdit {...props} />
     </BackgroudAppContext.Provider>

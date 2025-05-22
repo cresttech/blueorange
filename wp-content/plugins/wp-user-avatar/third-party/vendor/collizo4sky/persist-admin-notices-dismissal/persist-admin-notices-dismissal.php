@@ -30,7 +30,7 @@ namespace ProfilePressVendor;
 if (!\defined('ABSPATH')) {
     die;
 }
-if (!\class_exists('ProfilePressVendor\\PAnD')) {
+if (!\class_exists('ProfilePressVendor\PAnD')) {
     /**
      * Class PAnD
      */

@@ -10,37 +10,48 @@
  */
 
 get_header(); ?>
-
-<div class="page-content">
+<div class="page-content resources_page">
+	<section class="banner_sec inner_banner wi_full" style="background-image: url(<?php bloginfo('template_url') ?>/newimages/home-banner-shape.svg), linear-gradient(to bottom, #192C47, #1B375F);">
+	    <div class="container-xxl">
+            <div class="title_col mx-auto text-center" data-aos="fade-up" data-aos-duration="2000">
+                <h1 class="text-uppercase text-white">search results</h1>
+            </div>
+	    </div>
+	</section>
 	<section class="insight_sec blog_sec wi_full py_3 pt-0">
-	    <div class="container">
+	    <div class="container-xxl">
 	    	<div class="blog_wrapper row">
-
-
 	    		 <div class="blog_filter wi_full mt_3">
 		            <form class="group" role="search" method="get" action="<?php echo site_url(); ?>/">
 		               <div class="row">
 		                  <div class="col-12 col-sm-6 col-lg-3">
 		                     <div class="blog_search form-group">
-		                        <input type="text" name="post_type" value="<?php echo $_GET['post_type']; ?>" / style="display: none;">
-		                        <input type="hidden" value="<?php echo $_GET['tag_name']; ?>" name="tag_name" />
-		                        <input type="hidden" value="<?php echo $_GET['tag_names']; ?>" name="tag_names" />
-		                        <input type="hidden" value="<?php echo $_GET['indtag_name']; ?>" name="indtag_name" />
+
+		                     	<?php if( isset($_GET['post_type']) && $_GET['post_type'] != '') { ?>
+			                        <input type="text" name="post_type" value="<?php echo $_GET['post_type']; ?>" / style="display: none;">
+			                    <?php } ?>
+		                        <input type="hidden" value="<?php echo $_GET['tax_blog_tags'] ?? ''; ?>" name="tax_blog_tags" />
+		                        <input type="hidden" value="<?php echo $_GET['tax_technology_tags'] ?? ''; ?>" name="tax_technology_tags" />
+		                        <input type="hidden" value="<?php echo $_GET['tax_industries_tags'] ?? ''; ?>" name="tax_industries_tags" />
 		                        <input type="text" value="<?php echo $_GET['s'] ?? ''; ?>" name="s" placeholder="Search" class="form-control" />
 		                     </div>
 		                  </div>
-						   <?php if ( isset( $_GET['tags'] ) && $_GET['tags'] != '' ) { ?>
+						   <?php //if ( isset( $_GET['tags'] ) && $_GET['tags'] != '' ) { ?>
 		                  <div class="col-12 col-sm-6 col-lg-2">
 		                     <div class="blog_tags form-group">
 		                        <?php
 		                           $terms = get_terms([
-		                               	'taxonomy' => $_GET['tag_name'],
+		                               	//'taxonomy' => $_GET['tag_name'],
+		                               	'taxonomy' => $_GET['tax_blog_tags'] ?? 'blog_tags',
 		                               	'hide_empty' => false,
 		                           ]);
 		                         ?>
-		                        <select name="tags[]" class="form-control select2"  data-placeholder="Select Services" multiple>
+		                        <select name="tags[]" class="form-control selectOpt" id="select_services" multiple>
 		                           <?php
-		                           		$tags = $_GET['tags'];
+		                           		$tags = [];
+		                           		if ( isset( $_GET['tags'] ) ) { 
+		                           			$tags = $_GET['tags']; 
+		                           		};
 		                              	foreach ($terms as $term){ 
 		                              		$selected = '';
 		                              		if(in_array($term->slug, $tags)){
@@ -52,21 +63,26 @@ get_header(); ?>
 		                        </select>
 		                     </div>
 		                  </div>
-						   <?php } if ( isset( $_GET['techtags'] ) && $_GET['techtags'] != '' ) { ?>
+						   <?php //} if ( isset( $_GET['techtags'] ) && $_GET['techtags'] != '' ) { ?>
 						  <div class="col-12 col-sm-6 col-lg-2">
 		                     <div class="blog_tags form-group">
 		                        <?php
 		                           $terms2 = get_terms([
-		                               	'taxonomy' => $_GET['tag_names'],
+		                               	//'taxonomy' => $_GET['tag_names'],
+		                           		'taxonomy' => $_GET['tax_technology_tags'] ?? 'technology_tags',
 		                               	'hide_empty' => false,
 		                           ]);
 		                         ?>
-		                        <select name="techtags[]" class="form-control select2"  data-placeholder="Select Technologies" multiple>
+		                        <select name="techtags[]" class="form-control selectOpt" id="select_technology" multiple>
 		                           <?php
-		                           		$tags2 = $_GET['techtags'];
+		                           		$techtags = [];
+		                           		if ( isset( $_GET['techtags'] ) ) { 
+		                           			$techtags = $_GET['techtags']; 
+		                           		};
+
 		                              	foreach ($terms2 as $term2){ 
 		                              		$selected2 = '';
-		                              		if(in_array($term2->slug, $tags2)){
+		                              		if(in_array($term2->slug, $techtags)){
 		                              			$selected2 = ' selected ';
 		                              		}
 		                            	?>
@@ -75,30 +91,35 @@ get_header(); ?>
 		                        </select>
 		                     </div>
 		                  </div>
-						  <?php } if ( isset( $_GET['indtags'] ) && $_GET['indtags'] != '' ) { ?>
+						  <?php //} if ( isset( $_GET['indtags'] ) && $_GET['indtags'] != '' ) { ?>
 						  <div class="col-12 col-sm-6 col-lg-2">
 		                     <div class="blog_tags form-group">
 		                        <?php
-		                           $terms2 = get_terms([
-		                               	'taxonomy' => $_GET['indtag_name'],
+
+		                           $terms3 = get_terms([
+		                               	//'taxonomy' => $_GET['tax_industries_tags'],
+		                           		'taxonomy' =>  $_GET['tax_industries_tags'] ?? 'industries_tags' ,
 		                               	'hide_empty' => false,
 		                           ]);
 		                         ?>
-		                        <select name="indtags[]" class="form-control select2"  data-placeholder="Select Industries" multiple>
+		                        <select name="indtags[]" class="form-control selectOpt" id="select_industry" multiple>
 		                           <?php
-		                           		$tags2 = $_GET['indtags'];
-		                              	foreach ($terms2 as $term2){ 
-		                              		$selected2 = '';
-		                              		if(in_array($term2->slug, $tags2)){
-		                              			$selected2 = ' selected ';
+		                           		$indtags = [];
+		                           		if ( isset( $_GET['indtags'] ) ) { 
+		                           			$indtags = $_GET['indtags']; 
+		                           		};
+		                              	foreach ($terms3 as $term3){ 
+		                              		$selected3 = '';
+		                              		if(in_array($term3->slug, $indtags)){
+		                              			$selected3 = ' selected ';
 		                              		}
 		                            	?>
-		                                 	<option value="<?php echo $term2->slug; ?>" <?php echo $selected2; ?> ><?php echo $term2->name; ?></option>
+		                                 	<option value="<?php echo $term3->slug; ?>" <?php echo $selected3; ?> ><?php echo $term3->name; ?></option>
 		                           <?php } ?>
 		                        </select>
 		                     </div>
 		                  </div>
-						  <?php } ?>
+						  <?php //} ?>
 		                  <div class="col-12 col-sm-6 col-lg-3">
 		                     <div class="submit_btn d-flex justify-content-end">
 		                        <input value="Search" class="button blue_btn" type="submit">
@@ -128,8 +149,8 @@ get_header(); ?>
 			esc_html(
 				/* translators: %d: The number of search results. */
 				_n(
-					'We found %d result for your search.',
-					'We found %d results for your search.',
+					'Search results: %d posts.',
+					'Search results: %d posts.',
 					(int) $wp_query->found_posts,
 					'twentytwentyone'
 				)

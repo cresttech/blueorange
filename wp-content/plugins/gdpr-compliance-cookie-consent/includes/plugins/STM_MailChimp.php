@@ -13,7 +13,7 @@ class STM_MailChimp
 
     	$content .= '<div class="stm_gdpr_checker"><input id="stm_gdpr" class="stm_gdpr" type="checkbox" name="stm_gdpr" required />
 			<label for="stm_gdpr">
-				' . STM_Helpers::stm_helpers_checkboxText(self::SLUG) . '
+				' . STM_Helpers::stm_helpers_checkboxText(self::SLUG) . STM_Helpers::stm_helpers_get_commitment() . '
 			</label></div>';
 
 		return $content;

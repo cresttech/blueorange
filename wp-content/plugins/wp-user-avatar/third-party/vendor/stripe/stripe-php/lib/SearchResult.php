@@ -56,6 +56,9 @@ class SearchResult extends StripeObject implements \Countable, \IteratorAggregat
     {
         $this->filters = $filters;
     }
+    /**
+     * @return mixed
+     */
     #[\ReturnTypeWillChange]
     public function offsetGet($k)
     {
@@ -103,6 +106,8 @@ class SearchResult extends StripeObject implements \Countable, \IteratorAggregat
         return new \ArrayIterator($this->data);
     }
     /**
+     * @throws Exception\ApiErrorException
+     *
      * @return \Generator|TStripeObject[] A generator that can be used to
      *    iterate across all objects across all pages. As page boundaries are
      *    encountered, the next page will be fetched automatically for
@@ -113,7 +118,7 @@ class SearchResult extends StripeObject implements \Countable, \IteratorAggregat
         $page = $this;
         while (\true) {
             foreach ($page as $item) {
-                (yield $item);
+                yield $item;
             }
             $page = $page->nextPage();
             if ($page->isEmpty()) {
@@ -152,6 +157,8 @@ class SearchResult extends StripeObject implements \Countable, \IteratorAggregat
      *
      * @param null|array $params
      * @param null|array|string $opts
+     *
+     * @throws Exception\ApiErrorException
      *
      * @return SearchResult<TStripeObject>
      */

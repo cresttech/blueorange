@@ -108,14 +108,14 @@ class ContentConditions
         $name_attr = sprintf('ppress_cc_data[content][%s][%s][condition]', esc_attr($facetListId), esc_attr($facetId));
         ?>
         <div class="facet" data-facet="<?= esc_attr($facetId) ?>">
-            <i class="badge or"><?= esc_html__('or', 'wp-user-avatar') ?></i>
+            <i class="badge or"><?= esc_html__('and', 'wp-user-avatar') ?></i>
             <div class="col">
                 <select class="ppress-content-condition-rule-name" class="ppcr-condition-rule-name" name="<?= $name_attr; ?>">
                     <option value=""><?php _e('Select a condition', 'wp-user-avatar'); ?></option>
                     <?php foreach ($this->get_conditions_by_group() as $group => $conditions) : ?>
                         <optgroup label="<?= $group; ?>">
                             <?php foreach ($conditions as $id => $condition) : ?>
-                                <option value="<?php echo $id; ?>" <?php selected(@$savedRule['condition'], $id); ?>>
+                                <option value="<?php echo $id; ?>" <?php selected($savedRule['condition'] ?? '', $id); ?>>
                                     <?php echo $condition['title'] ?>
                                 </option>
                             <?php endforeach ?>
@@ -127,7 +127,7 @@ class ContentConditions
                 <div class="ppress-cr-rule-values">
                     <?php if (is_array($savedRule) && ! empty($savedRule)) : ?>
                         <?php if ( ! empty($savedRule['condition'])) : ?>
-                            <?= $this->rule_value_field(@$savedRule['condition'], $facetListId, $facetId, @$savedRule['value']); ?>
+                            <?= $this->rule_value_field($savedRule['condition'] ?? '', $facetListId, $facetId, ($savedRule['value'] ?? '')); ?>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -141,14 +141,52 @@ class ContentConditions
         <?php
     }
 
+	public function exempt_rule_row($facetListId, $facetId, $savedRule = [])
+	{
+		$name_attr = sprintf('ppress_cc_data[exempt][%s][%s][condition]', esc_attr($facetListId), esc_attr($facetId));
+		?>
+		<div class="facet" data-facet="<?= esc_attr($facetId) ?>">
+			<i class="badge or"><?= esc_html__('or', 'wp-user-avatar') ?></i>
+			<div class="col">
+				<select class="ppress-content-condition-exempt-rule-name" class="ppcr-condition-exempt-rule-name" name="<?= $name_attr; ?>">
+					<option value=""><?php _e('Select a condition', 'wp-user-avatar'); ?></option>
+					<?php foreach ($this->get_conditions_by_group() as $group => $conditions) : ?>
+						<optgroup label="<?= $group; ?>">
+							<?php foreach ($conditions as $id => $condition) : ?>
+								<option value="<?php echo $id; ?>" <?php selected($savedRule['condition'] ?? '', $id); ?>>
+									<?php echo $condition['title'] ?>
+								</option>
+							<?php endforeach ?>
+						</optgroup>
+					<?php endforeach ?>
+				</select>
+			</div>
+			<div class="col">
+				<div class="ppress-cr-rule-values">
+					<?php if (is_array($savedRule) && ! empty($savedRule)) : ?>
+						<?php if ( ! empty($savedRule['condition'])) : ?>
+							<?= $this->exempt_rule_value_field($savedRule['condition'], $facetListId, $facetId, $savedRule['value'] ?? ''); ?>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+			<div class="actions">
+				<a href="javascript:void(0)" class="remove removeFacet">
+					<span class="icon-circle-minus dashicons dashicons-minus"></span>
+				</a>
+			</div>
+		</div>
+		<?php
+	}
+
     public function unlinked_and_rule_badge()
     {
-        echo '<p class="and"><em>' . esc_html__('AND', 'wp-user-avatar') . '</em></p>';
+        echo '<p class="and"><em>' . esc_html__('OR', 'wp-user-avatar') . '</em></p>';
     }
 
     public function linked_and_rule_badge()
     {
-        echo '<p class="and"><a href="javascript:void(0);" class="addCondition">+ ' . esc_html__('AND', 'wp-user-avatar') . '</a></p>';
+        echo '<p class="and"><a href="javascript:void(0);" class="addCondition">+ ' . esc_html__('OR', 'wp-user-avatar') . '</a></p>';
     }
 
     public function rules_group_row($facetListId = '', $facetId = '', $facets = [], $unlink_and = false)
@@ -171,7 +209,7 @@ class ContentConditions
 
                 </div>
                 <div class="add-or">
-                    <a href="javascript:void(0)" class="add addFacet">+ <?= esc_html__('OR', 'wp-user-avatar') ?></a>
+                    <a href="javascript:void(0)" class="add addFacet">+ <?= esc_html__('AND', 'wp-user-avatar') ?></a>
                 </div>
             </section>
 
@@ -186,6 +224,33 @@ class ContentConditions
         <?php
     }
 
+	public function exempt_rules_group_row($facetListId = '', $facetId = '', $facets = [])
+	{
+		?>
+		<div>
+			<section class="condAction" data-facet-list="<?= esc_attr($facetListId) ?>">
+
+				<div class="facetList">
+
+					<?php if (is_array($facets) && ! empty($facets)) : ?>
+						<?php foreach ($facets as $facetId => $savedRule) : ?>
+							<?php $this->exempt_rule_row($facetListId, $facetId, $savedRule); ?>
+						<?php endforeach; ?>
+					<?php endif; ?>
+
+					<?php if ( ! is_array($facets) || empty($facets)) : ?>
+						<?php $this->exempt_rule_row($facetListId, $facetId); ?>
+					<?php endif; ?>
+
+				</div>
+				<div class="add-or">
+					<a href="javascript:void(0)" class="add addFacet">+ <?= esc_html__('OR', 'wp-user-avatar') ?></a>
+				</div>
+			</section>
+		</div>
+		<?php
+	}
+
     /**
      * @param null $condition
      *
@@ -196,7 +261,7 @@ class ContentConditions
     {
         $conditions = $this->get_conditions();
 
-        return isset($conditions[$condition]) ? $conditions[$condition] : null;
+        return $conditions[$condition] ?? null;
     }
 
     /**
@@ -476,6 +541,39 @@ class ContentConditions
 
         return false;
     }
+
+	public function exempt_rule_value_field($condition_id, $facetListId, $facetId, $savedValue = [])
+	{
+		$condition_field_settings = ppress_var($this->get_condition($condition_id), 'field');
+
+		$field_type = ppress_var($condition_field_settings, 'type');
+
+		if ( ! empty($field_type)) {
+
+			$method = $field_type . '_field';
+
+			if (method_exists($this, $method)) {
+
+				ob_start();
+
+				$name_attr = sprintf('ppress_cc_data[exempt][%s][%s][value][]', $facetListId, $facetId);
+
+				if ($method == 'select_field') {
+					$args['options']  = ppress_var($condition_field_settings, 'options');
+					$args['selected'] = $savedValue;
+
+					$this->$method($name_attr, $args);
+
+				} else {
+					$this->$method($name_attr, $savedValue);
+				}
+
+				return ob_get_clean();
+			}
+		}
+
+		return false;
+	}
 
     public static function get_instance()
     {

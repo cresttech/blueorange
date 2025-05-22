@@ -971,7 +971,7 @@
 }
 
 .pp-form-buider-settings-popup-container .pp-form-buider-settings-popup-body select.pp-form-control {
-    background-image: url(../../images/frontend/arrow-down.png);
+    background-image: url(../images/frontend/arrow-down.png);
     background-position: right 20px center;
     background-repeat: no-repeat;
     background-size: 10px auto;
@@ -1044,7 +1044,7 @@
     height: 35px;
 }
 
-.ppSCB-margin-r input[type="text"], .ppSCB-margin-r textarea, .ppSCB-margin-r select {
+.ppSCB-margin-r input[type="text"], .ppSCB-margin-r input[type="number"], .ppSCB-margin-r textarea, .ppSCB-margin-r select {
     max-width: 500px !important;
     width: 100% !important;
 }
@@ -1057,7 +1057,8 @@ textarea.wp-editor-area {
 }
 
 .ppSCB-tab-content {
-    max-width: 840px;
+    max-width: 100%;
+    width: 100% !important;
 }
 
 #ppSettings.ppSCB-tab-content {
@@ -1561,16 +1562,16 @@ textarea.wp-editor-area {
     display: none !important;
 }
 
-#ppContentProtectionContent #workflowConditions .facetList .facet select {
+#ppContentProtectionContent .workflowConditions .facetList .facet select {
     min-height: 32px;
 }
 
-#ppContentProtectionContent #workflowConditions .col input.select2-search__field {
+#ppContentProtectionContent .workflowConditions .col input.select2-search__field {
     margin: 0;
     min-height: 0;
 }
 
-#ppContentProtectionContent #workflowConditions .select2 li {
+#ppContentProtectionContent .workflowConditions .select2 li {
     margin-bottom: 0;
 }
 
@@ -2862,4 +2863,14 @@ textarea.wp-editor-area {
 
 .ppress-login-redirect--repeater-item + .ppress-no-login-redirect-rule-message {
     display: none;
+}
+
+.ppress-admin .ppress-copy-url-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ppress-admin .wp-list-table td .dashicons-admin-page {
+    padding: 5px 0;
 }

@@ -14,7 +14,7 @@ class STM_WooCommerce
 		$args = array(
 			'type' => 'checkbox',
 			'class' => array('stmgdpr-checkbox'),
-			'label' => STM_Helpers::stm_helpers_checkboxText(self::SLUG),
+			'label' => STM_Helpers::stm_helpers_checkboxText(self::SLUG) . STM_Helpers::stm_helpers_get_commitment(),
 			'required' => true,
 		);
 		woocommerce_form_field('stmgdpr', $args);

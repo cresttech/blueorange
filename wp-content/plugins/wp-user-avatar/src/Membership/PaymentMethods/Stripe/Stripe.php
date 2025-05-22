@@ -10,7 +10,6 @@ use ProfilePress\Core\Membership\Models\Order\OrderEntity;
 use ProfilePress\Core\Membership\Models\Order\OrderFactory;
 use ProfilePress\Core\Membership\Models\Plan\PlanEntity;
 use ProfilePress\Core\Membership\Models\Plan\PlanFactory;
-use ProfilePress\Core\Membership\Models\Subscription\SubscriptionBillingFrequency;
 use ProfilePress\Core\Membership\Models\Subscription\SubscriptionEntity;
 use ProfilePress\Core\Membership\Models\Subscription\SubscriptionFactory;
 use ProfilePress\Core\Membership\PaymentMethods\AbstractPaymentMethod;
@@ -265,7 +264,7 @@ class Stripe extends AbstractPaymentMethod
                     '<code>' . esc_url($this->get_webhook_url()) . '</code>',
                     '<a target="_blank" href="' . esc_url($stripe_webhook_url) . '">',
                     '</a>',
-                    '<a target="_blank" href="https://profilepress.com/article/setting-up-stripe/">'
+                    '<a target="_blank" href="https://profilepress.com/article/setting-up-stripe/#Webhooks">'
                 ),
             ];
         }
@@ -438,9 +437,11 @@ class Stripe extends AbstractPaymentMethod
             // Before we cancel, lets make sure this subscription exists at Stripe.
             $stripeSubObj = APIClass::stripeClient()->subscriptions->retrieve($subscription->profile_id);
 
-            if ('canceled' === $stripeSubObj->status) return false;
+            if ('canceled' === $stripeSubObj->status || empty($subscription->profile_id)) return false;
 
             if (false === $cancel_immediately) {
+
+                if (in_array($stripeSubObj->cancel_at_period_end, ['true', true], true)) return false;
 
                 if (in_array($stripeSubObj->status, ['active', 'trialing'], true)) {
                     APIClass::stripeClient()->subscriptions->update($subscription->profile_id, ['cancel_at_period_end' => true]);
@@ -450,20 +451,6 @@ class Stripe extends AbstractPaymentMethod
 
             } else {
                 APIClass::stripeClient()->subscriptions->cancel($subscription->profile_id);
-            }
-
-            // We must now loop through and cancel all unpaid invoice to ensure that additional payment attempts are not made.
-            $invoices = APIClass::stripeClient()->invoices->all(['subscription' => $subscription->profile_id])->toArray();
-
-            if (isset($invoices['data'])) {
-
-                foreach ($invoices['data'] as $invoice) {
-
-                    // Skip paid invoices.
-                    if ($invoice['paid'] === true) continue;
-
-                    APIClass::stripeClient()->invoices->voidInvoice($invoice['id']);
-                }
             }
 
         } catch (\Exception $e) {
@@ -625,7 +612,7 @@ class Stripe extends AbstractPaymentMethod
         $response['stripe_args'] = apply_filters('ppress_stripe_js_args', [
             'mode'     => $plan->is_auto_renew() ? 'subscription' : 'payment',
             'currency' => strtolower(ppress_get_currency()),
-            'amount'   => (int)PaymentHelpers::process_amount($cart_vars->total)
+            'amount'   => absint(PaymentHelpers::process_amount($cart_vars->total))
         ], $cart_vars, $response);
 
         return $response;
@@ -940,7 +927,10 @@ class Stripe extends AbstractPaymentMethod
 
                     $setup_intent_response = $this->create_setup_intent($customer_id, $checkout_metadata);
 
-                    if (is_array($response)) $response['setup_intent_response'] = $setup_intent_response;
+                    if (is_array($response) && isset($setup_intent_response['id'])) {
+                        $order->update_meta('stripe_setup_intent', $setup_intent_response['id']);
+                        $response['setup_intent_response'] = $setup_intent_response;
+                    }
                 }
 
                 return (new CheckoutResponse())

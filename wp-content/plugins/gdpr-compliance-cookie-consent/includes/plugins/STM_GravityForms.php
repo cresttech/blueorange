@@ -29,7 +29,7 @@ class STM_GravityForms
 			$updated = false;
 			$choices = array(
 				array(
-					'text' => STM_Helpers::stm_helpers_checkboxText(self::SLUG),
+					'text' => STM_Helpers::stm_helpers_checkboxText(self::SLUG) . STM_Helpers::stm_helpers_get_commitment(),
 					'value' => 'true',
 					'isSelected' => false
 				)

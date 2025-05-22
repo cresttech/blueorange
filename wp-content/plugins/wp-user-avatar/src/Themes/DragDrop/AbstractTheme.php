@@ -8,19 +8,17 @@ use ProfilePress\Core\Classes\FormRepository as FR;
 
 abstract class AbstractTheme implements ThemeInterface
 {
-    public $form_id;
+    public int $form_id;
 
-    public $form_type;
+    public string $form_type;
 
-    public $tag_name;
+    public string $tag_name;
 
-    public $metabox_settings;
-
-    public $asset_image_url;
+    public string $asset_image_url;
 
     public function __construct($form_id, $form_type)
     {
-        $this->form_id   = $form_id;
+        $this->form_id   = absint($form_id);
         $this->form_type = $form_type;
 
         $this->asset_image_url = PPRESS_ASSETS_URL . '/images';
@@ -50,7 +48,7 @@ abstract class AbstractTheme implements ThemeInterface
         add_filter('ppress_form_builder_meta_box_colors_settings', [$this, 'color_settings']);
 
         // add div wrapper to remember me checkbox
-        add_filter('ppress_form_field_listing_login-remember', [$this, 'remember_me_checkbox_wrapper'], 10, 2);
+        add_filter('ppress_form_field_listing_login-remember', [$this, 'remember_me_checkbox_wrapper'], 10, 4);
         // when label is found in field settings, it is automatically added before the field so we are removing it.
         add_filter('ppress_form_field_listing_setting_login-remember', [$this, 'remember_me_checkbox_remove_label']);
     }
@@ -81,7 +79,13 @@ abstract class AbstractTheme implements ThemeInterface
 
         $default_metabox_settings = $this->default_metabox_settings();
 
-        return isset($metabox_settings[$key]) ? $metabox_settings[$key] : (isset($default_metabox_settings[$key]) ? $default_metabox_settings[$key] : '');
+        $val = $metabox_settings[$key] ?? ($default_metabox_settings[$key] ?? '');
+
+        if (is_array($val) && ! empty($val)) {
+            $val = array_filter($val);
+        }
+
+        return $val;
     }
 
     public function remember_me_checkbox_remove_label($field_setting)
@@ -91,12 +95,24 @@ abstract class AbstractTheme implements ThemeInterface
         return $field_setting;
     }
 
-    public function remember_me_checkbox_wrapper($tag, $field_setting)
+    public function remember_me_checkbox_wrapper($tag, $field_setting, $form_id, $form_type)
     {
-        return sprintf(
-            '<div class="ppform-remember-me"><label class="ppform-remember-checkbox">%s <span class="ppform-remember-label">%s</span></label></div>',
-            $tag, $field_setting['label']
-        );
+        if ($form_type == FR::LOGIN_TYPE) {
+
+            static $flag = [];
+
+            if ( ! isset($flag[$form_id . '_' . $form_type])) {
+
+                $flag[$form_id . '_' . $form_type] = true;
+
+                return sprintf(
+                    '<div class="ppform-remember-me"><label class="ppform-remember-checkbox">%s <span class="ppform-remember-label">%s</span></label></div>',
+                    $tag, esc_html($field_setting['label'])
+                );
+            }
+        }
+
+        return $tag;
     }
 
     public function default_metabox_settings()
@@ -328,6 +344,8 @@ abstract class AbstractTheme implements ThemeInterface
         $youtube_url   = $this->get_profile_field(Base::cif_youtube, true);
         $vk_url        = $this->get_profile_field(Base::cif_vk, true);
         $pinterest_url = $this->get_profile_field(Base::cif_pinterest, true);
+        $bluesky_url   = $this->get_profile_field(Base::cif_bluesky, true);
+        $threads_url   = $this->get_profile_field(Base::cif_threads, true);
 
         if (
             empty($facebook_url) &&
@@ -337,6 +355,8 @@ abstract class AbstractTheme implements ThemeInterface
             empty($instagram_url) &&
             empty($youtube_url) &&
             empty($pinterest_url) &&
+            empty($bluesky_url) &&
+            empty($threads_url) &&
             empty($vk_url)) {
             return false;
         }
@@ -356,9 +376,9 @@ abstract class AbstractTheme implements ThemeInterface
 
             <?php if ( ! empty($twitter_url)) : ?>
                 <a href="<?= $twitter_url ?>" target="_blank" class="ppress-pf-social-icon dpf-twitter">
-                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="48" height="48" viewBox="0 0 48 48" style=" fill:#000000;">
-                        <path fill="#03a9f4" d="M24 4A20 20 0 1 0 24 44A20 20 0 1 0 24 4Z"></path>
-                        <path fill="#fff" d="M36,17.12c-0.882,0.391-1.999,0.758-3,0.88c1.018-0.604,2.633-1.862,3-3 c-0.951,0.559-2.671,1.156-3.793,1.372C31.311,15.422,30.033,15,28.617,15C25.897,15,24,17.305,24,20v2c-4,0-7.9-3.047-10.327-6 c-0.427,0.721-0.667,1.565-0.667,2.457c0,1.819,1.671,3.665,2.994,4.543c-0.807-0.025-2.335-0.641-3-1c0,0.016,0,0.036,0,0.057 c0,2.367,1.661,3.974,3.912,4.422C16.501,26.592,16,27,14.072,27c0.626,1.935,3.773,2.958,5.928,3c-1.686,1.307-4.692,2-7,2 c-0.399,0-0.615,0.022-1-0.023C14.178,33.357,17.22,34,20,34c9.057,0,14-6.918,14-13.37c0-0.212-0.007-0.922-0.018-1.13 C34.95,18.818,35.342,18.104,36,17.12"></path>
+                    <svg style="width: 34px;height: 34px;" fill-rule="evenodd" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m256 0c141.385 0 256 114.615 256 256s-114.615 256-256 256-256-114.615-256-256 114.615-256 256-256z"/>
+                        <path d="m318.64 157.549h33.401l-72.973 83.407 85.85 113.495h-67.222l-52.647-68.836-60.242 68.836h-33.423l78.052-89.212-82.354-107.69h68.924l47.59 62.917zm-11.724 176.908h18.51l-119.476-157.964h-19.86z" fill="#fff" fill-rule="nonzero"/>
                     </svg>
                 </a>
             <?php endif; ?>
@@ -398,11 +418,38 @@ abstract class AbstractTheme implements ThemeInterface
                     </svg>
                 </a>
             <?php endif; ?>
-            
-              <?php if ( ! empty($pinterest_url)) : ?>
+
+            <?php if ( ! empty($pinterest_url)) : ?>
                 <a href="<?= $pinterest_url ?>" target="_blank" class="ppress-pf-social-icon dpf-pinterest">
-                    <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="35px" xml:space="preserve">
-<circle cx="24" cy="24" r="20" fill="#E60023"/><path fill="#FFF" d="M24.4439087,11.4161377c-8.6323242,0-13.2153931,5.7946167-13.2153931,12.1030884	c0,2.9338379,1.5615234,6.5853882,4.0599976,7.7484131c0.378418,0.1762085,0.581543,0.1000366,0.668457-0.2669067	c0.0668945-0.2784424,0.4038086-1.6369019,0.5553589-2.2684326c0.0484619-0.2015381,0.0246582-0.3746338-0.1384277-0.5731201	c-0.8269653-1.0030518-1.4884644-2.8461304-1.4884644-4.5645752c0-4.4115601,3.3399658-8.6799927,9.0299683-8.6799927	c4.9130859,0,8.3530884,3.3484497,8.3530884,8.1369019c0,5.4099731-2.7322998,9.1584473-6.2869263,9.1584473	c-1.9630737,0-3.4330444-1.6238403-2.9615479-3.6153564c0.5654297-2.3769531,1.6569214-4.9415283,1.6569214-6.6584473	c0-1.5354004-0.8230591-2.8169556-2.5299683-2.8169556c-2.006958,0-3.6184692,2.0753784-3.6184692,4.8569336	c0,1.7700195,0.5984497,2.9684448,0.5984497,2.9684448s-1.9822998,8.3815308-2.3453979,9.9415283	c-0.4019775,1.72229-0.2453003,4.1416016-0.0713501,5.7233887l0,0c0.4511108,0.1768799,0.9024048,0.3537598,1.3687744,0.4981079l0,0	c0.8168945-1.3278198,2.0349731-3.5056763,2.4864502-5.2422485c0.2438354-0.9361572,1.2468872-4.7546387,1.2468872-4.7546387	c0.6515503,1.2438965,2.5561523,2.296936,4.5831299,2.296936c6.0314941,0,10.378418-5.546936,10.378418-12.4400024	C36.7738647,16.3591919,31.3823242,11.4161377,24.4439087,11.4161377z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="35px" xml:space="preserve">
+<circle cx="24" cy="24" r="20" fill="#E60023"/>
+                        <path fill="#FFF" d="M24.4439087,11.4161377c-8.6323242,0-13.2153931,5.7946167-13.2153931,12.1030884	c0,2.9338379,1.5615234,6.5853882,4.0599976,7.7484131c0.378418,0.1762085,0.581543,0.1000366,0.668457-0.2669067	c0.0668945-0.2784424,0.4038086-1.6369019,0.5553589-2.2684326c0.0484619-0.2015381,0.0246582-0.3746338-0.1384277-0.5731201	c-0.8269653-1.0030518-1.4884644-2.8461304-1.4884644-4.5645752c0-4.4115601,3.3399658-8.6799927,9.0299683-8.6799927	c4.9130859,0,8.3530884,3.3484497,8.3530884,8.1369019c0,5.4099731-2.7322998,9.1584473-6.2869263,9.1584473	c-1.9630737,0-3.4330444-1.6238403-2.9615479-3.6153564c0.5654297-2.3769531,1.6569214-4.9415283,1.6569214-6.6584473	c0-1.5354004-0.8230591-2.8169556-2.5299683-2.8169556c-2.006958,0-3.6184692,2.0753784-3.6184692,4.8569336	c0,1.7700195,0.5984497,2.9684448,0.5984497,2.9684448s-1.9822998,8.3815308-2.3453979,9.9415283	c-0.4019775,1.72229-0.2453003,4.1416016-0.0713501,5.7233887l0,0c0.4511108,0.1768799,0.9024048,0.3537598,1.3687744,0.4981079l0,0	c0.8168945-1.3278198,2.0349731-3.5056763,2.4864502-5.2422485c0.2438354-0.9361572,1.2468872-4.7546387,1.2468872-4.7546387	c0.6515503,1.2438965,2.5561523,2.296936,4.5831299,2.296936c6.0314941,0,10.378418-5.546936,10.378418-12.4400024	C36.7738647,16.3591919,31.3823242,11.4161377,24.4439087,11.4161377z"/></svg>
+                </a>
+            <?php endif; ?>
+
+            <?php if ( ! empty($bluesky_url)) : ?>
+                <a href="<?= $bluesky_url ?>" target="_blank" class="ppress-pf-social-icon dpf-bluesky">
+                    <svg style="width: 34px;height: 34px;" fill-rule="evenodd" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="256" cy="256" r="256" fill="#2690FE"/>
+                        <path d="M193.688 172.036C218.909 190.972 246.042 229.367 256 249.969C265.963 229.367 293.091 190.972 318.312 172.036C336.515 158.375 366 147.805 366 181.444C366 188.164 362.15 237.879 359.887 245.951C352.035 274.012 323.42 281.172 297.968 276.84C342.46 284.409 353.78 309.494 329.333 334.58C282.908 382.215 262.61 322.626 257.404 307.357C256.45 304.56 256.005 303.251 256 304.361C255.995 303.245 255.55 304.555 254.596 307.357C249.39 322.626 229.092 382.215 182.667 334.58C158.22 309.494 169.54 284.414 214.032 276.84C188.575 281.172 159.96 274.017 152.113 245.951C149.85 237.879 146 188.159 146 181.444C146 147.805 175.49 158.375 193.688 172.036Z" fill="url(#paint0_linear_581_21)"/>
+                        <defs>
+                        <linearGradient id="paint0_linear_581_21" x1="256" y1="159.287" x2="256" y2="344.731" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="white"/>
+                        <stop offset="1" stop-color="white"/>
+                        </linearGradient>
+                        </defs>
+                    </svg>
+
+
+
+            <?php endif; ?>
+
+            <?php if ( ! empty($threads_url)) : ?>
+                <a href="<?= $threads_url ?>" target="_blank" class="ppress-pf-social-icon dpf-threads">
+                    <svg style="width: 34px;height: 34px;" fill-rule="evenodd" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="256" cy="256" r="256" fill="black"/>
+                        <path d="M317.192 246.651C316.09 246.123 314.972 245.614 313.838 245.127C311.864 208.718 291.992 187.873 258.624 187.66C258.472 187.659 258.322 187.659 258.171 187.659C238.212 187.659 221.613 196.188 211.396 211.708L229.748 224.31C237.38 212.718 249.358 210.246 258.18 210.246C258.282 210.246 258.384 210.246 258.485 210.247C269.472 210.317 277.762 213.515 283.128 219.752C287.033 224.292 289.645 230.567 290.938 238.485C281.197 236.828 270.662 236.318 259.4 236.964C227.675 238.794 207.28 257.317 208.65 283.056C209.345 296.112 215.842 307.344 226.943 314.681C236.329 320.884 248.418 323.917 260.982 323.231C277.573 322.32 290.589 315.983 299.67 304.395C306.566 295.595 310.928 284.191 312.854 269.821C320.761 274.599 326.621 280.885 329.858 288.443C335.361 301.289 335.682 322.4 318.476 339.611C303.4 354.688 285.279 361.211 257.893 361.412C227.515 361.187 204.54 351.433 189.602 332.423C175.614 314.621 168.385 288.909 168.116 256C168.385 223.09 175.614 197.378 189.602 179.577C204.54 160.567 227.514 150.813 257.893 150.587C288.492 150.815 311.867 160.615 327.376 179.717C334.981 189.085 340.715 200.865 344.495 214.6L366 208.856C361.418 191.95 354.209 177.381 344.399 165.299C324.516 140.809 295.436 128.26 257.968 128H257.818C220.426 128.259 191.672 140.856 172.355 165.439C155.166 187.315 146.299 217.754 146.001 255.91L146 256L146.001 256.09C146.299 294.245 155.166 324.685 172.355 346.561C191.672 371.144 220.426 383.741 257.818 384H257.968C291.211 383.769 314.644 375.056 333.948 355.748C359.204 330.488 358.443 298.825 350.119 279.388C344.147 265.449 332.761 254.128 317.192 246.651ZM259.794 300.676C245.889 301.46 231.444 295.212 230.732 281.829C230.204 271.907 237.785 260.835 260.647 259.516C263.265 259.365 265.834 259.291 268.358 259.291C276.662 259.291 284.431 260.098 291.494 261.644C288.859 294.58 273.407 299.928 259.794 300.676Z" fill="white"/>
+                    </svg>
                 </a>
             <?php endif; ?>
 

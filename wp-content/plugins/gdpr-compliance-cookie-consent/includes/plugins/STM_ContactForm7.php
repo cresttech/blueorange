@@ -35,7 +35,7 @@ class STM_ContactForm7
 		if ($tag->type == 'stmgdpr') {
 
 			$tag->name = 'stmgdpr';
-			$label = (!empty($tag->labels[0])) ? esc_html($tag->labels[0]) : STM_Helpers::stm_helpers_checkboxText(self::SLUG);
+			$label = (!empty($tag->labels[0])) ? esc_html($tag->labels[0]) : STM_Helpers::stm_helpers_checkboxText(self::SLUG) . STM_Helpers::stm_helpers_get_commitment();
 			$class = wpcf7_form_controls_class($tag->type, 'wpcf7-validates-as-required');
 			$validation_error = wpcf7_get_validation_error($tag->name);
 

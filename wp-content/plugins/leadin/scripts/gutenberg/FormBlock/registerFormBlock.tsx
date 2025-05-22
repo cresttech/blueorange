@@ -1,6 +1,7 @@
 import React from 'react';
 import * as WpBlocksApi from '@wordpress/blocks';
 import SprocketIcon from '../Common/SprocketIcon';
+import StylesheetErrorBondary from '../Common/StylesheetErrorBondary';
 import FormBlockSave from './FormBlockSave';
 import { connectionStatus } from '../../constants/leadinConfig';
 import FormGutenbergPreview from './FormGutenbergPreview';
@@ -8,6 +9,7 @@ import ErrorHandler from '../../shared/Common/ErrorHandler';
 import FormEdit from '../../shared/Form/FormEdit';
 import ConnectionStatus from '../../shared/enums/connectionStatus';
 import { __ } from '@wordpress/i18n';
+import { isFullSiteEditor } from '../../utils/withMetaData';
 
 export interface IFormBlockAttributes {
   attributes: {
@@ -15,25 +17,39 @@ export interface IFormBlockAttributes {
     formId: string;
     preview?: boolean;
     formName: string;
+    embedVersion?: string;
   };
 }
 
 export interface IFormBlockProps extends IFormBlockAttributes {
   setAttributes: Function;
   isSelected: boolean;
+  context?: any;
 }
 
 export default function registerFormBlock() {
   const editComponent = (props: IFormBlockProps) => {
-    if (props.attributes.preview) {
-      return <FormGutenbergPreview />;
-    } else if (connectionStatus === ConnectionStatus.Connected) {
-      return <FormEdit {...props} origin="gutenberg" preview={true} />;
-    } else {
-      return <ErrorHandler status={401} />;
-    }
+    const isPreview = props.attributes.preview;
+    const isConnected = connectionStatus === ConnectionStatus.Connected;
+    return (
+      <StylesheetErrorBondary>
+        {isPreview ? (
+          <FormGutenbergPreview />
+        ) : isConnected ? (
+          <FormEdit
+            {...props}
+            origin="gutenberg"
+            preview={true}
+            fullSiteEditor={isFullSiteEditor()}
+          />
+        ) : (
+          <ErrorHandler status={401} />
+        )}
+      </StylesheetErrorBondary>
+    );
   };
 
+  // We do not support the full site editor: https://issues.hubspotcentral.com/browse/WP-1033
   if (!WpBlocksApi) {
     return null;
   }
@@ -52,6 +68,9 @@ export default function registerFormBlock() {
         type: 'string',
       } as WpBlocksApi.BlockAttribute<string>,
       formName: {
+        type: 'string',
+      } as WpBlocksApi.BlockAttribute<string>,
+      embedVersion: {
         type: 'string',
       } as WpBlocksApi.BlockAttribute<string>,
       preview: {

@@ -59,7 +59,7 @@ class SettingsPage extends AbstractSettingsPage
     }
 
     /**
-     * @return void|string
+     * @return void
      * @throws \Exception
      */
     public function save_customer()
@@ -265,7 +265,7 @@ class SettingsPage extends AbstractSettingsPage
     public function settings_page_function()
     {
         add_action('admin_footer', [$this, 'js_script']);
-        add_action('wp_cspa_main_content_area', [$this, 'admin_settings_page_callback'], 10, 2);
+        add_filter('wp_cspa_main_content_area', [$this, 'admin_settings_page_callback'], 10, 2);
         add_action('wp_cspa_before_closing_header', [$this, 'add_new_button']);
 
         add_action('wp_cspa_form_tag', function ($option_name) {
@@ -283,7 +283,7 @@ class SettingsPage extends AbstractSettingsPage
         if (ppressGET_var('ppress_customer_action') == 'new') {
 
             $instance->main_content([
-                [
+                apply_filters('ppress_admin_new_customer_form_fields', [
                     'account_type'  => [
                         'label' => __('User Account', 'wp-user-avatar'),
                         'type'  => 'custom_field_block',
@@ -316,7 +316,7 @@ class SettingsPage extends AbstractSettingsPage
                         'type'  => 'custom_field_block',
                         'data'  => self::password_field()
                     ]
-                ]
+                ])
             ]);
 
             $instance->remove_white_design();
@@ -427,7 +427,7 @@ class SettingsPage extends AbstractSettingsPage
                         $("#username_row").hide();
                         $("#password_row").hide();
                     }
-                }).change();
+                }).trigger('change');
             });
         </script>
         <?php

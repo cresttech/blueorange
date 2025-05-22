@@ -111,7 +111,7 @@ class SettingsPage extends AbstractSettingsPage
             $plan->user_role = $new_role;
         }
 
-        $plan->name                = sanitize_text_field($_POST['name']);
+        $plan->name                = stripslashes(sanitize_text_field($_POST['name']));
         $plan->description         = stripslashes(wp_kses_post($_POST['description']));
         $plan->order_note          = stripslashes(wp_kses_post($_POST['order_note']));
         $plan->price               = ppress_sanitize_amount($_POST['price']);
@@ -223,7 +223,7 @@ class SettingsPage extends AbstractSettingsPage
     public function settings_page_function()
     {
         add_action('admin_footer', [$this, 'js_template']);
-        add_action('wp_cspa_main_content_area', [$this, 'admin_settings_page_callback'], 10, 2);
+        add_filter('wp_cspa_main_content_area', [$this, 'admin_settings_page_callback'], 10, 2);
         add_action('wp_cspa_before_closing_header', [$this, 'add_new_button']);
 
         $instance = Custom_Settings_Page_Api::instance();

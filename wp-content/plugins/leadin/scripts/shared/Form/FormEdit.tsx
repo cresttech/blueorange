@@ -12,10 +12,12 @@ import {
 import { ProxyMessages } from '../../iframe/integratedMessages';
 import LoadingBlock from '../Common/LoadingBlock';
 import { getOrCreateBackgroundApp } from '../../utils/backgroundAppUtils';
+import { isRefreshTokenAvailable } from '../../utils/isRefreshTokenAvailable';
 
 interface IFormEditProps extends IFormBlockProps {
   preview: boolean;
   origin: 'gutenberg' | 'elementor';
+  fullSiteEditor?: boolean;
 }
 
 function FormEdit({
@@ -24,18 +26,24 @@ function FormEdit({
   setAttributes,
   preview = true,
   origin = 'gutenberg',
+  fullSiteEditor,
 }: IFormEditProps) {
-  const { formId, formName } = attributes;
+  const { formId, formName, embedVersion } = attributes;
   const formSelected = portalId && formId;
 
   const isBackgroundAppReady = useBackgroundAppContext();
   const monitorFormPreviewRender = usePostBackgroundMessage();
 
-  const handleChange = (selectedForm: { value: string; label: string }) => {
+  const handleChange = (selectedForm: {
+    value: string;
+    label: string;
+    embedVersion?: string;
+  }) => {
     setAttributes({
       portalId,
       formId: selectedForm.value,
       formName: selectedForm.label,
+      embedVersion: selectedForm.embedVersion,
     });
   };
 
@@ -58,12 +66,20 @@ function FormEdit({
           formName={formName}
           handleChange={handleChange}
           origin={origin}
+          embedVersion={embedVersion}
         />
       )}
       {formSelected && (
         <Fragment>
           {isSelected && <UISpacer />}
-          {preview && <PreviewForm portalId={portalId} formId={formId} />}
+          {preview && (
+            <PreviewForm
+              portalId={portalId}
+              formId={formId}
+              fullSiteEditor={fullSiteEditor}
+              embedVersion={embedVersion}
+            />
+          )}
         </Fragment>
       )}
     </Fragment>
@@ -73,7 +89,9 @@ function FormEdit({
 export default function FormEditContainer(props: IFormEditProps) {
   return (
     <BackgroudAppContext.Provider
-      value={refreshToken && getOrCreateBackgroundApp(refreshToken)}
+      value={
+        isRefreshTokenAvailable() && getOrCreateBackgroundApp(refreshToken)
+      }
     >
       <FormEdit {...props} />
     </BackgroudAppContext.Provider>

@@ -4,6 +4,7 @@ import Raven from '../lib/Raven';
 import {
   accountName,
   adminUrl,
+  connectionStatus,
   deviceId,
   hubspotBaseUrl,
   leadinQueryParams,
@@ -16,15 +17,78 @@ import {
   refreshToken,
   impactLink,
   theme,
+  lastAuthorizeTime,
+  lastDeauthorizeTime,
+  lastDisconnectTime,
   leadinPluginVersion,
   phpVersion,
   wpVersion,
+  contentEmbed,
+  requiresContentEmbedScope,
+  decryptError,
+  LeadinConfig,
 } from '../constants/leadinConfig';
 import { App, AppIframe } from './constants';
 import { messageMiddleware } from './messageMiddleware';
 import { resizeWindow, useIframeNotRendered } from '../utils/iframe';
 
-const getLeadinConfig = () => {
+type PartialLeadinConfig = Pick<
+  LeadinConfig,
+  | 'accountName'
+  | 'adminUrl'
+  | 'connectionStatus'
+  | 'deviceId'
+  | 'plugins'
+  | 'portalDomain'
+  | 'portalEmail'
+  | 'portalId'
+  | 'reviewSkippedDate'
+  | 'refreshToken'
+  | 'impactLink'
+  | 'theme'
+  | 'trackConsent'
+  | 'lastAuthorizeTime'
+  | 'lastDeauthorizeTime'
+  | 'lastDisconnectTime'
+  | 'leadinPluginVersion'
+  | 'phpVersion'
+  | 'wpVersion'
+  | 'contentEmbed'
+  | 'requiresContentEmbedScope'
+  | 'decryptError'
+>;
+
+type AppIntegrationConfig = Pick<LeadinConfig, 'adminUrl'>;
+
+const getIntegrationConfig = (): AppIntegrationConfig => {
+  return {
+    adminUrl: leadinQueryParams.adminUrl,
+  };
+};
+
+/**
+ * A modified version of the original leadinConfig that is passed to some integrated apps.
+ *
+ * Important:
+ * Try not to add new fields here.
+ * This config is already too large and broad in scope.
+ * It tightly couples the apps that use it with the WordPress plugin.
+ * Consider instead passing new required fields as new entry to PluginAppOptions or app-specific options.
+ */
+type AppLeadinConfig = {
+  admin: string;
+  company: string;
+  email: string;
+  firstName: string;
+  irclickid: string;
+  justConnected: string;
+  lastName: string;
+  mpid: string;
+  nonce: string;
+  websiteName: string;
+} & PartialLeadinConfig;
+
+const getLeadinConfig = (): AppLeadinConfig => {
   const utm_query_params = Object.keys(leadinQueryParams)
     .filter(x => /^utm/.test(x))
     .reduce(
@@ -39,12 +103,16 @@ const getLeadinConfig = () => {
     admin: leadinQueryParams.admin,
     adminUrl,
     company: leadinQueryParams.company,
+    connectionStatus,
     deviceId,
     email: leadinQueryParams.email,
     firstName: leadinQueryParams.firstName,
     irclickid: leadinQueryParams.irclickid,
     justConnected: leadinQueryParams.justConnected,
     lastName: leadinQueryParams.lastName,
+    lastAuthorizeTime,
+    lastDeauthorizeTime,
+    lastDisconnectTime,
     leadinPluginVersion,
     mpid: leadinQueryParams.mpid,
     nonce: leadinQueryParams.nonce,
@@ -58,6 +126,9 @@ const getLeadinConfig = () => {
     trackConsent: leadinQueryParams.trackConsent,
     websiteName: leadinQueryParams.websiteName,
     wpVersion,
+    contentEmbed,
+    requiresContentEmbedScope,
+    decryptError,
     ...utm_query_params,
   };
 };
@@ -70,18 +141,17 @@ const getAppOptions = (app: App, createRoute = false) => {
     PluginAppOptions,
   }: any = window;
   let options;
-
   switch (app) {
     case App.Plugin:
-      options = new PluginAppOptions().setLeadinConfig(getLeadinConfig());
+      options = new PluginAppOptions();
       break;
     case App.PluginSettings:
-      options = new PluginAppOptions()
-        .setLeadinConfig(getLeadinConfig())
-        .setPluginSettingsInit();
+      options = new PluginAppOptions().setPluginSettingsInit();
       break;
     case App.Forms:
-      options = new FormsAppOptions();
+      options = new FormsAppOptions().setIntegratedAppConfig(
+        getIntegrationConfig()
+      );
       if (createRoute) {
         options = options.setCreateFormAppInit();
       }
@@ -118,7 +188,8 @@ export default function useAppEmbedder(
       const options = getAppOptions(app, createRoute)
         .setLocale(locale)
         .setDeviceId(deviceId)
-        .setRefreshToken(refreshToken);
+        .setRefreshToken(refreshToken)
+        .setLeadinConfig(getLeadinConfig());
 
       const embedder = new IntegratedAppEmbedder(
         AppIframe[app],

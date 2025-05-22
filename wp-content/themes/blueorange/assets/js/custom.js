@@ -1,20 +1,20 @@
 $(window).scroll(function() {
     var y = $(window).scrollTop();
     if (y > 0) {
-    $(".navbar").addClass('sticky');
+    $("#header").addClass('sticky');
     } else {
-    $(".navbar").removeClass('sticky');
+    $("#header").removeClass('sticky');
     }
 }); 
 
-$(document).ready(function() {
-    $("button.navbar-toggler").click(function(event) {
-        $(this).toggleClass("active");
-        $("#Menu_sidebar").toggleClass('show');
-        $('.nav_overlay').toggleClass('show');
-        $('body').toggleClass('body_overflow');
-    });
-});
+// $(document).ready(function() {
+//     $("button.navbar-toggler").click(function(event) {
+//         $(this).toggleClass("active");
+//         $("#Menu_sidebar").toggleClass('show');
+//         $('.nav_overlay').toggleClass('show');
+//         $('body').toggleClass('body_overflow');
+//     });
+// });
 
 
 $(function(){
@@ -66,6 +66,35 @@ $('.tech_carousel').owlCarousel({
     }
 });
 
+
+$('.conclusion_carousel').owlCarousel({
+    loop: false,
+    rewind: true,
+    margin: 15,
+    autoplay: true,
+    dots: false,
+    nav: false,
+    autoplayTimeout: 3500,
+    smartSpeed: 700,
+    responsiveClass: true,
+    touchDrag: false,
+    mouseDrag: false,
+    responsive: {
+    0: {
+      items: 2
+    },
+    480: {
+      items: 2
+    },
+    575: {
+      items: 3
+    },
+    768: {
+      items: 3
+    }
+    }
+});
+
 itemClass.on('translate.owl.carousel', function(e){
     idx = e.item.index;
     $('.owl-item').removeClass('middle');
@@ -106,6 +135,41 @@ jQuery('.client_carousel').owlCarousel({
     }
 });
 
+jQuery('.partnerr_carousel').owlCarousel({
+    loop: false,
+    margin: 20,
+    autoplay: true,
+    dots: false,
+    nav: false,
+    autoplayTimeout: 3500,
+    smartSpeed: 2000,
+    responsiveClass: true,
+    responsive: {
+    0: {
+      items: 2
+    },
+    576: {
+      items: 4
+    },
+    1000: {
+      items: 6
+    }
+    }
+});
+
+
+jQuery('#strategy_services').owlCarousel({
+    loop: true,
+    margin: 0,
+    items: 1,
+    autoplay: false,
+    dots: false,
+    nav: true,
+    autoplayTimeout: 3500,
+    smartSpeed: 2000,
+    responsiveClass: true,
+    navText: ['<img src="/wp-content/themes/blueorange/assets/images/left-arrow.svg">', '<img src="/wp-content/themes/blueorange/assets/images/right-arrow.svg">']
+});
 
 
 
@@ -121,6 +185,20 @@ jQuery(document).ready(function($) {
     });
 });
 
+$(document).ready(function(){
+  $('.show_more').on('click', function() {
+    $(this).closest('.more_item').find('.more__wrapper').fadeToggle("slow");
+    $(this).closest('.more_item').find('.more__dots').toggleClass("visibe");
+    $(this).closest('.industry_more').find('.more__wrapper').fadeToggle("slow");
+    $(this).closest('.industry_more').find('.more__dots').toggleClass("visibe");
+    $(this).toggleClass("visibe");
+    if (this.innerText === "Read Less") {
+        this.innerHTML = "Read More";
+    } else {
+        this.innerHTML = "Read Less";
+    }
+  });
+});
 
 
 (function() {
@@ -132,3 +210,58 @@ jQuery(document).ready(function($) {
     }
   });  
 }).call(this);
+
+jQuery('.case_carousel').owlCarousel({
+    loop: false,
+    margin: 0,
+    autoplay: false,
+    //rewind: true,
+    dots: false,
+    nav: true,
+    navText: ["<img src='/wp-content/themes/blueorange/assets/images/slider-prev.svg'>", "<img src='/wp-content/themes/blueorange/assets/images/slider-next.svg'>"],
+    autoplayTimeout: 3500,
+    smartSpeed: 2000,
+    touchDrag: false,
+    mouseDrag: false,
+    responsiveClass: true,
+    responsive: {
+    0: {
+      items: 1,
+      margin: 0,
+      autoplay: false
+    },
+    768: {
+      items: 2,
+      margin: 15
+    },
+    1024: {
+      items: 3,
+      margin: 25
+    }
+    }
+});
+
+
+jQuery('.team_testi_carousel').owlCarousel({
+    loop: false,
+    margin: 0,
+    autoplay: false,
+    dots: false,
+    nav: true,
+    navText: ["<img src='/wp-content/uploads/2025/05/arrow-prev-blue.svg'>", "<img src='/wp-content/uploads/2025/05/arrow-next-blue.svg'>"],
+    autoplayTimeout: 3500,
+    smartSpeed: 2000,
+    touchDrag: false,
+    mouseDrag: false,
+    responsiveClass: true,
+    responsive: {
+    0: {
+      items: 1,
+      margin: 0, 
+    },
+    768: {
+      items: 2,
+      margin: 20
+    }
+    }
+});

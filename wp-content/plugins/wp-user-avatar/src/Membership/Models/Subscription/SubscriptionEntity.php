@@ -182,7 +182,8 @@ class SubscriptionEntity extends AbstractModel implements ModelInterface
 
         $active_statuses = [
             SubscriptionStatus::ACTIVE,
-            SubscriptionStatus::CANCELLED, // Cancelled is an active state because it just means it won't renew, but is also not yet expired.
+            SubscriptionStatus::CANCELLED,
+            // Cancelled is an active state because it just means it won't renew, but is also not yet expired.
             SubscriptionStatus::COMPLETED,
             SubscriptionStatus::TRIALLING,
         ];
@@ -199,11 +200,8 @@ class SubscriptionEntity extends AbstractModel implements ModelInterface
             $this->is_cancelled() && $last_order instanceof OrderEntity && $last_order->is_refunded()
         ) {
             $ret = false;
-        } else {
-
-            if ( ! $this->is_expired() && in_array($this->status, $active_statuses, true)) {
-                $ret = true;
-            }
+        } elseif ( ! $this->is_expired() && in_array($this->status, $active_statuses, true)) {
+            $ret = true;
         }
 
         return apply_filters('ppress_subscription_is_active', $ret, $this->id, $this);
@@ -217,9 +215,12 @@ class SubscriptionEntity extends AbstractModel implements ModelInterface
 
             $ret = true;
 
-        } elseif ( ! $this->is_lifetime() && in_array($this->status, [SubscriptionStatus::ACTIVE, SubscriptionStatus::CANCELLED, SubscriptionStatus::TRIALLING])) {
-
-            $ret = false;
+        } elseif ( ! $this->is_lifetime() && in_array($this->status, [
+                SubscriptionStatus::ACTIVE,
+                SubscriptionStatus::CANCELLED,
+                SubscriptionStatus::TRIALLING
+            ])
+        ) {
 
             $expiration_date = CarbonImmutable::parse($this->expiration_date, wp_timezone());
             $now             = CarbonImmutable::now(wp_timezone());
@@ -685,13 +686,13 @@ class SubscriptionEntity extends AbstractModel implements ModelInterface
 
         $expiration_date_timestamp = ppress_strtotime_utc($this->expiration_date);
 
-        if ($addBuffer && $this->billing_frequency == SubscriptionBillingFrequency::DAILY) {
+        if ($addBuffer && ($this->is_cancelled() || $this->billing_frequency == SubscriptionBillingFrequency::DAILY)) {
             $addBuffer = false;
         }
 
         if (apply_filters('ppress_subscription_is_add_buffer', $addBuffer, $this)) {
             // added a day buffer to expiration date to give time for gateway to renew the sub
-            $expiration_date_timestamp += DAY_IN_SECONDS;
+            $expiration_date_timestamp += apply_filters('ppress_subscription_buffer_seconds', absint(1.5 * DAY_IN_SECONDS), $this);
         }
 
         if ($check_expiration && time() <= $expiration_date_timestamp) {

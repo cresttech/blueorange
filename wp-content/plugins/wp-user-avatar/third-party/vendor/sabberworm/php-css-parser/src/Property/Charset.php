@@ -21,10 +21,14 @@ class Charset implements AtRule
     private $oCharset;
     /**
      * @var int
+     *
+     * @internal since 8.8.0
      */
     protected $iLineNo;
     /**
      * @var array<array-key, Comment>
+     *
+     * @internal since 8.8.0
      */
     protected $aComments;
     /**
@@ -63,15 +67,19 @@ class Charset implements AtRule
     }
     /**
      * @return string
+     *
+     * @deprecated in V8.8.0, will be removed in V9.0.0. Use `render` instead.
      */
     public function __toString()
     {
         return $this->render(new OutputFormat());
     }
     /**
+     * @param OutputFormat|null $oOutputFormat
+     *
      * @return string
      */
-    public function render(OutputFormat $oOutputFormat)
+    public function render($oOutputFormat)
     {
         return "{$oOutputFormat->comments($this)}@charset {$this->oCharset->render($oOutputFormat)};";
     }
@@ -96,7 +104,7 @@ class Charset implements AtRule
      */
     public function addComments(array $aComments)
     {
-        $this->aComments = \array_merge($this->aComments, $aComments);
+        $this->aComments = array_merge($this->aComments, $aComments);
     }
     /**
      * @return array<array-key, Comment>

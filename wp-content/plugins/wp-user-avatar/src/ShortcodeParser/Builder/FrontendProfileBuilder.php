@@ -4,12 +4,11 @@ namespace ProfilePress\Core\ShortcodeParser\Builder;
 
 use ProfilePress\Core\Classes\ExtensionManager as EM;
 use ProfilePress\Core\Classes\PROFILEPRESS_sql;
-use ProfilePress\Core\Classes\UserAvatar;
+use WP_User;
 
 class FrontendProfileBuilder
 {
-    /** @var \WP_User user_data */
-    static private $user_data;
+    private static WP_User $user_data;
 
     /**
      * Define all front-end profile sub-shortcode.
@@ -55,6 +54,8 @@ class FrontendProfileBuilder
         add_shortcode('profile-post-list', array($this, 'author_post_list'));
         add_shortcode('profile-comment-list', array($this, 'author_comment_list'));
 
+        add_shortcode('profile-view-url', array($this, 'view_user_profile_url'));
+
         add_shortcode('profile-author-posts-url', array($this, 'author_post_url'));
 
         add_shortcode('profile-date-registered', array($this, 'date_user_registered'));
@@ -70,6 +71,11 @@ class FrontendProfileBuilder
     public function date_user_registered()
     {
         return date('F jS, Y', strtotime(self::$user_data->user_registered));
+    }
+
+    public function view_user_profile_url(): string
+    {
+        return ppress_get_frontend_profile_url(self::$user_data->user_login);
     }
 
     public function author_post_url()
@@ -243,7 +249,7 @@ class FrontendProfileBuilder
     {
         $user_id = self::$user_data->ID;
 
-        return apply_filters('ppress_profile_avatar_url', ppress_get_cover_image_url($user_id), self::$user_data);
+        return apply_filters('ppress_cover_image_url', ppress_get_cover_image_url($user_id), self::$user_data);
     }
 
     /**
@@ -293,7 +299,7 @@ class FrontendProfileBuilder
             }
         }
 
-        return apply_filters('ppress_profile_display_name', ucwords($display_name), self::$user_data);
+        return apply_filters('ppress_profile_display_name', $display_name, self::$user_data);
     }
 
     /**
@@ -373,38 +379,30 @@ class FrontendProfileBuilder
         return apply_filters('ppress_profile_cpf', $data, self::$user_data);
     }
 
-    public function profile_user_uploaded_file($atts)
+    public static function get_user_uploaded_file($user_id, $field_key, $is_raw = false)
     {
-        $atts = ppress_normalize_attributes($atts);
-
-        $atts = shortcode_atts(
-            array(
-                'key' => '',
-                'raw' => false,
-            ),
-            $atts
-        );
-
-        $key = esc_attr($atts['key']);
-
-        $user_upload_data = get_user_meta(self::$user_data->ID, 'pp_uploaded_files', true);
+        $user_upload_data = get_user_meta($user_id, 'pp_uploaded_files', true);
 
         if (empty($user_upload_data)) return '';
 
-        $filename = isset($user_upload_data[$key]) ? $user_upload_data[$key] : '';
+        $filename = $user_upload_data[$field_key] ?? '';
 
         if (empty($filename)) return '';
 
         $link = PPRESS_FILE_UPLOAD_URL . $filename;
 
-        if ( ! empty($atts['raw']) && ($atts['raw'] === true || $atts['raw'] == 'true')) {
-            $return = $link;
-        } else {
-            $return = "<a href='$link'>$filename</a>";
-        }
+        return $is_raw === true || $is_raw == 'true' ? $link : "<a href='$link'>$filename</a>";
+    }
+
+    public function profile_user_uploaded_file($atts)
+    {
+        $atts = ppress_normalize_attributes($atts);
+
+        $atts = shortcode_atts(['key' => '', 'raw' => false], $atts);
+
+        $return = self::get_user_uploaded_file(self::$user_data->ID, esc_attr($atts['key']), $atts['raw']);
 
         return apply_filters('ppress_profile_file', $return, self::$user_data);
-
     }
 
     /**
@@ -704,12 +702,8 @@ class FrontendProfileBuilder
 
     public static function get_instance($user = '')
     {
-        static $instance = false;
-        $user = isset($user) && ! empty($user) ? $user : wp_get_current_user();
-        if ( ! $instance) {
-            $instance = new self($user);
-        }
+        $user = ! empty($user) ? $user : wp_get_current_user();
 
-        return $instance;
+        return new self($user);
     }
 }

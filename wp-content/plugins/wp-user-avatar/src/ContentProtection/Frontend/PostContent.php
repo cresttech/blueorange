@@ -37,6 +37,64 @@ class PostContent
         add_action('awb_readd_third_party_the_content_changes', function () {
             add_filter('the_content', [$this, 'the_content'], PHP_INT_MAX - 1);
         });
+
+        $this->uncode_theme_compatibility();
+
+        add_action('wp', function () {
+            $this->woocommerce_compatibility();
+        }, 9999);
+    }
+
+    public function uncode_theme_compatibility()
+    {
+        add_filter('uncode_apply_the_content', function () {
+            return ! is_singular('post');
+        });
+
+        if (apply_filters('uncode_mp_single_content_raw', '__return_true')) {
+
+            add_filter('uncode_get_single_content_raw', function ($content) {
+                return $this->the_content($content);
+            }, 999999, 1);
+        }
+    }
+
+    public function woocommerce_compatibility()
+    {
+        if (class_exists('\WooCommerce') && ! apply_filters('ppress_content_protection_disable_woocommerce_compatibility', false)) {
+
+            $is_restricted = $this->is_post_content_restricted();
+
+            if (false !== $is_restricted) {
+
+                add_filter('woocommerce_product_tabs', function ($tabs) {
+                    return array_filter($tabs, function ($v, $k) {
+                        return $k == 'description';
+                    }, ARRAY_FILTER_USE_BOTH);
+                });
+
+                add_filter('woocommerce_product_description_heading', '__return_empty_string');
+
+                add_filter('woocommerce_short_description', function () {
+                    $msg = esc_html__('You are not allowed to purchase this product.', 'wp-user-avatar');
+
+                    return apply_filters('ppress_content_protection_woocommerce_product_purchase_error_message', $msg);
+                });
+
+                remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
+            }
+
+            add_filter('woocommerce_loop_add_to_cart_link', function ($add_to_cart_html, $product) {
+
+                // is_post_content_restricted can be used because global $post; will always be WP_Post of each loop product item
+                if ($this->is_post_content_restricted(true)) {
+                    return '';
+                }
+
+                return $add_to_cart_html;
+
+            }, 99, 2);
+        }
     }
 
     /**
@@ -73,17 +131,17 @@ class PostContent
             \Elementor\Plugin::$instance->preview->is_preview_mode(),
         ];
 
-        return in_array(true, $checks, true);
+        return apply_filters('ppress_content_protection_is_protection_disabled', in_array(true, $checks, true));
     }
 
     /**
+     * @param bool $skip_cache
+     *
      * @return bool
      */
-    public function is_post_content_restricted()
+    public function is_post_content_restricted($skip_cache = false)
     {
-        static $is_restricted = null;
-
-        if (is_null($is_restricted)) {
+        $callback = function () {
 
             $is_restricted = false;
 
@@ -95,15 +153,18 @@ class PostContent
 
                     foreach ($metas as $meta) {
 
-                        $meta = ppress_var($meta, 'meta_value', []);
+                        $meta_value = ppress_var($meta, 'meta_value', []);
 
-                        if ( ! in_array(ppress_var($meta, 'is_active', true), ['true', true], true)) continue;
+                        if ( ! in_array(ppress_var($meta_value, 'is_active', true), ['true', true], true)) continue;
 
-                        $access_condition = ppress_var($meta, 'access_condition', []);
+                        $access_condition = ppress_var($meta_value, 'access_condition', []);
 
-                        $noaccess_action = ppress_var($access_condition, 'noaccess_action');
+                        /* commented this out because we want content to be restricted when accessed via rss and rest api
+                           this is even redundant because redirect happens before the_content hook is fired.
+                           $noaccess_action = ppress_var($access_condition, 'noaccess_action');
 
-                        if ('message' != $noaccess_action) continue;
+                           if ('message' != $noaccess_action) continue;
+                        */
 
                         $who_can_access = ppress_var($access_condition, 'who_can_access', 'everyone');
 
@@ -113,7 +174,11 @@ class PostContent
 
                         $access_membership_plans = ppress_var($access_condition, 'access_membership_plans', []);
 
-                        if (Checker::content_match($meta['content'])) {
+                        $is_new = ppress_var($meta_value, 'is_new') == 'true';
+
+                        if (Checker::content_match($meta_value['content'], false, $is_new)) {
+
+                            if (ppress_var($meta_value, 'exempt', []) && Checker::content_match($meta_value['exempt'])) continue;
 
                             if (Checker::is_blocked($who_can_access, $access_roles, $access_wp_users, $access_membership_plans)) {
                                 $is_restricted = $access_condition;
@@ -123,9 +188,17 @@ class PostContent
                     }
                 }
             }
-        }
 
-        return $is_restricted;
+            return $is_restricted;
+        };
+
+        if ($skip_cache === true) return $callback();
+
+        static $cache = null;
+
+        if (is_null($cache)) $cache = $callback();
+
+        return $cache;
     }
 
     public function the_content($content)
@@ -140,13 +213,13 @@ class PostContent
 
             $noaccess_action_message_style = ppress_var($access_condition, 'noaccess_action_message_style', 'none');
 
-            $content = $this->get_restricted_message($noaccess_message_type, $custom_message, $noaccess_action_message_style);
+            $content = $this->get_restricted_message($content, $noaccess_message_type, $custom_message, $noaccess_action_message_style);
         }
 
         return $content;
     }
 
-    public function get_restricted_message($noaccess_message_type = 'global', $custom_message = '', $message_style = 'none')
+    public function get_restricted_message($post_content, $noaccess_message_type = 'global', $custom_message = '', $message_style = 'none')
     {
         $message = '';
 
@@ -161,13 +234,13 @@ class PostContent
                 $message = $this->style_paywall_message(wpautop($custom_message), $message_style);
                 break;
             case 'post_excerpt':
-                $message = $this->get_post_excerpt();
+                $message = $this->get_post_excerpt($post_content);
                 break;
             case 'post_excerpt_global':
-                $message = $this->get_post_excerpt() . $this->style_paywall_message($this->parse_message($global_message), $message_style);
+                $message = $this->get_post_excerpt($post_content) . $this->style_paywall_message($this->parse_message($global_message), $message_style);
                 break;
             case 'post_excerpt_custom':
-                $message = $this->get_post_excerpt() . $this->style_paywall_message($this->parse_message($custom_message), $message_style);
+                $message = $this->get_post_excerpt($post_content) . $this->style_paywall_message($this->parse_message($custom_message), $message_style);
                 break;
         }
 
@@ -192,7 +265,7 @@ class PostContent
         return $message;
     }
 
-    public function get_post_excerpt()
+    public function get_post_excerpt($post_content)
     {
         global $post;
 
@@ -202,7 +275,7 @@ class PostContent
 
         $more = false;
 
-        if (has_excerpt($post->ID)) {
+        if ( ! apply_filters('ppress_content_protection_ignore_post_excerpt', false) && has_excerpt($post->ID)) {
             $the_excerpt = $post->post_excerpt;
         } elseif (strstr($post->post_content, '<!--more-->')) {
             $more        = true;
@@ -212,7 +285,15 @@ class PostContent
             $the_excerpt = $post->post_content;
         }
 
-        return apply_filters('ppress_content_protection_excerpt', self::trim_content($the_excerpt, $length, $more), $post, $length);
+        $the_excerpt = self::trim_content($the_excerpt, $length, $more);
+
+        // if after trimming and stuff above, an empty content/string is return, re-trim again,
+        //this time with actual post content from _the_content filter
+        if (apply_filters('ppress_content_protection_use_filter_post_content', false, $post) || empty($the_excerpt)) {
+            $the_excerpt = self::trim_content($post_content, $length, $more);
+        }
+
+        return apply_filters('ppress_content_protection_excerpt', $the_excerpt, $post, $length);
     }
 
     public static function trim_content($the_excerpt = '', $length = 100, $more = false)

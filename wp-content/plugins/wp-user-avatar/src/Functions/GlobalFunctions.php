@@ -4,9 +4,10 @@ use ProfilePress\Core\Admin\SettingsPages\MailOptin;
 use ProfilePress\Core\Base;
 use ProfilePress\Core\Classes\ExtensionManager as EM;
 use ProfilePress\Core\Classes\FormRepository as FR;
-use ProfilePress\Core\Classes\PROFILEPRESS_sql as PROFILEPRESS_sql;
+use ProfilePress\Core\Classes\PROFILEPRESS_sql;
 use ProfilePress\Core\Classes\SendEmail;
 use ProfilePress\Core\Membership\CheckoutFields;
+use ProfilePress\Core\ShortcodeParser\Builder\FrontendProfileBuilder;
 
 /** Plugin DB settings data */
 function ppress_db_data()
@@ -88,7 +89,7 @@ function ppress_settings_by_key($key = '', $default = false, $is_empty = false)
         return isset($data[$key]) && ( ! empty($data[$key]) || ppress_is_boolean($data[$key])) ? $data[$key] : $default;
     }
 
-    return isset($data[$key]) ? $data[$key] : $default;
+    return $data[$key] ?? $default;
 }
 
 function ppress_get_setting($key = '', $default = false, $is_empty = false)
@@ -219,7 +220,8 @@ function ppress_login_redirect()
         } elseif ($login_redirect == 'dashboard') {
             $redirect = network_site_url('/wp-admin');
         } elseif ($login_redirect == 'previous_page' && ! empty($referrer_url)) {
-            $redirect = $referrer_url;
+            $reset_url = untrailingslashit(ppress_password_reset_url());
+            $redirect  = strstr($referrer_url, $reset_url) ? ppress_my_account_url() : $referrer_url;
         } elseif ('current_page' == $login_redirect) {
             // in ajax mode, pp_current_url is set so we can do client-side redirection to current page after login.
             // no way to get current url in social login hence, look it up from $_GET['pp_current_url']
@@ -282,13 +284,22 @@ function ppress_profile_url()
     return apply_filters('ppress_profile_url', $url);
 }
 
+/**
+ * @param $username_or_id
+ *
+ * @return string
+ */
 function ppress_get_frontend_profile_url($username_or_id)
 {
     if (is_numeric($username_or_id)) {
         $username_or_id = ppress_get_username_by_id($username_or_id);
     }
 
-    return home_url(ppress_get_profile_slug() . '/' . rawurlencode($username_or_id));
+    return apply_filters(
+        'ppress_frontend_profile_url',
+        home_url(ppress_get_profile_slug() . '/' . rawurlencode($username_or_id)),
+        $username_or_id
+    );
 }
 
 /**
@@ -425,7 +436,6 @@ function ppress_get_current_url_query_string()
 
     return esc_url_raw($url);
 }
-
 
 /**
  * @return string blog URL without scheme
@@ -1244,16 +1254,16 @@ function ppressGET_var($key, $default = false, $empty = false)
         return ! empty($bucket[$key]) ? $bucket[$key] : $default;
     }
 
-    return isset($bucket[$key]) ? $bucket[$key] : $default;
+    return $bucket[$key] ?? $default;
 }
 
 function ppress_var($bucket, $key, $default = false, $empty = false)
 {
     if ($empty) {
-        return isset($bucket[$key]) && ( ! empty($bucket[$key]) || ppress_is_boolean($bucket[$key])) ? $bucket[$key] : $default;
+        return isset($bucket[$key]) && ( ! empty($bucket[$key]) || ppress_is_boolean($bucket[$key]) || is_numeric($bucket[$key])) ? $bucket[$key] : $default;
     }
 
-    return isset($bucket[$key]) ? $bucket[$key] : $default;
+    return $bucket[$key] ?? $default;
 }
 
 function ppress_var_obj($bucket, $key, $default = false, $empty = false)
@@ -1262,7 +1272,7 @@ function ppress_var_obj($bucket, $key, $default = false, $empty = false)
         return isset($bucket->$key) && ( ! empty($bucket->$key) || ppress_is_boolean($bucket->$key)) ? $bucket->$key : $default;
     }
 
-    return isset($bucket->$key) ? $bucket->$key : $default;
+    return $bucket->$key ?? $default;
 }
 
 /**
@@ -1533,11 +1543,9 @@ function ppress_get_cover_image_url($user_id = false)
 
     $slug = get_user_meta($user_id, 'pp_profile_cover_image', true);
 
-    if ( ! empty($slug)) {
-        return PPRESS_COVER_IMAGE_UPLOAD_URL . "$slug";
-    }
+    $url = ! empty($slug) ? PPRESS_COVER_IMAGE_UPLOAD_URL . "$slug" : get_option('wp_user_cover_default_image_url');
 
-    return get_option('wp_user_cover_default_image_url');
+    return esc_url_raw($url);
 }
 
 function ppress_is_my_own_profile()
@@ -1563,6 +1571,8 @@ function ppress_social_network_fields()
         Base::cif_instagram => 'Instagram',
         Base::cif_github    => 'GitHub',
         Base::cif_pinterest => 'Pinterest',
+        Base::cif_bluesky   => 'Bluesky',
+        Base::cif_threads   => 'Threads',
     ]);
 }
 
@@ -1570,7 +1580,7 @@ function ppress_social_login_networks()
 {
     return apply_filters('ppress_social_login_networks', [
         'facebook'     => 'Facebook',
-        'twitter'      => 'Twitter',
+        'twitter'      => 'X/Twitter',
         'google'       => 'Google',
         'linkedin'     => 'LinkedIn',
         'microsoft'    => 'Microsoft',
@@ -1663,6 +1673,16 @@ function ppress_content_http_redirect($myURL)
     Please wait while you are redirected...or
     <a href="<?php echo $myURL; ?>">Click Here</a> if you do not want to wait.
     <?php
+}
+
+function ppress_do_admin_redirect($url)
+{
+    if ( ! headers_sent()) {
+        wp_safe_redirect($url);
+        exit;
+    }
+
+    ppress_content_http_redirect($url);
 }
 
 function ppress_is_json($str)
@@ -1776,18 +1796,15 @@ function ppress_upgrade_urls_affilify($url)
 
 function ppress_cache_transform($cache_key, $callback)
 {
-    static $ppress_cache_transform_bucket = [];
+    static $cache = [];
 
-    $result = ppress_var($ppress_cache_transform_bucket, $cache_key, false);
-
-    if ( ! $result) {
-
-        $result = $callback();
-
-        $ppress_cache_transform_bucket[$cache_key] = $result;
+    // If the cache key does not exist, compute the value and cache it.
+    if ( ! isset($cache[$cache_key])) {
+        $cache[$cache_key] = $callback();
     }
 
-    return $result;
+    // Return the cached result.
+    return $cache[$cache_key];
 }
 
 function ppress_form_has_field($form_id, $form_type, $field_shortcode_tag)
@@ -1813,12 +1830,18 @@ function ppress_form_has_field($form_id, $form_type, $field_shortcode_tag)
     return false;
 }
 
+/**
+ * @param $message
+ * @param WP_User $user
+ *
+ * @return array|mixed|string|string[]
+ */
 function ppress_custom_profile_field_search_replace($message, $user)
 {
     // handle support for custom fields placeholder.
     preg_match_all('#({{[a-z_-]+}})#', $message, $matches);
 
-    if (isset($matches[1]) && ! empty($matches[1])) {
+    if ( ! empty($matches[1])) {
 
         foreach ($matches[1] as $match) {
 
@@ -1826,13 +1849,15 @@ function ppress_custom_profile_field_search_replace($message, $user)
 
             $value = '';
 
-            if (isset($user->{$key})) {
+            $field_type = PROFILEPRESS_sql::get_field_type($key);
+
+            if ($field_type == 'file') {
+                $value = FrontendProfileBuilder::get_user_uploaded_file($user->ID, $key);
+            } elseif (isset($user->{$key})) {
 
                 $value = $user->{$key};
 
-                if (is_array($value)) {
-                    $value = implode(', ', $value);
-                }
+                if (is_array($value)) $value = implode(', ', $value);
             }
 
             $message = str_replace($match, $value, $message);

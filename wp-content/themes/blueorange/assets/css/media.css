@@ -5,32 +5,14 @@
 .max_width {
     max-width: 900px;
 }
-.inner_banner {
-	min-height: 850px !important;
-}
-section.fintech__banner {
-    height: 550px;
-}
 .sec_title {
     margin-bottom: 3rem;
 }
 .sec_title h2 {
     margin-bottom: 1.5rem;
 }
-/*h1, .get_started h2 {
-    font-size: 85px;
-}
-.accordion .card-header h3 {
-    font-size: 24px;
-}
-.services_content h4{
-    font-size: 20px;
-}
-.services_content p {
-    font-size: 17px;
-}*/
-.inner_banner .banner_content {
-    max-width: 650px;
+.inner_banner {
+   height: 480px;
 }
 .services_content li {
     margin-bottom: 11px;
@@ -43,33 +25,99 @@ section.fintech__banner {
 }
 }
 
+@media (min-width: 1441px) and (max-width: 1599px){
+.inner_banner {
+   height: 415px;
+}
+.inner_banner .banner_content {
+    max-width: 900px;
+}
+}
+
+@media (min-width: 1200px) and (max-width: 1440px){
+.inner_banner {
+   height: 395px;
+}
+.inner_banner img.desktop_banner {
+    object-position: right;
+}
+.inner_banner.blog_banner img.desktop_banner, .inner_banner.data_strategy_bnr img.desktop_banner {
+    object-position: center;
+}
+.inner_banner h1 {
+    font-size: 50px;
+    margin-bottom: 0;
+}
+.inner_banner .banner_content p {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+.inner_banner .btn_block {
+    margin-top: 1rem;
+}
+}
+
+@media (min-width: 992px) and (max-width: 1199px){
+.inner_banner {
+   height: 400px;
+}
+.inner_banner img.desktop_banner {
+    object-position: right;
+}
+.inner_banner.blog_banner img.desktop_banner, .inner_banner.data_strategy_bnr img.desktop_banner {
+    object-position: center;
+}
+.inner_banner h1 {
+    font-size: 50px;
+    margin-bottom: 0;
+}
+.inner_banner .banner_content p {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+.inner_banner .btn_block {
+    margin-top: 1rem;
+}
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+.inner_banner {
+   height: 320px;
+}
+.inner_banner img.desktop_banner {
+    object-position: right;
+}
+.inner_banner.blog_banner img.desktop_banner, .inner_banner.data_strategy_bnr img.desktop_banner {
+    object-position: center;
+}
+.inner_banner h1 {
+    font-size: 40px;
+    margin-bottom: 0;
+}
+.inner_banner .banner_content p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.inner_banner .btn_block {
+    margin-top: 1rem;
+}
+}
+
 @media (min-width: 1200px){
 .container-xxl {
     --bs-gutter-x: 5rem;
 }
 .inner_banner {
-	min-height: 700px;
 	display: flex;
 	align-items: center;
-	padding: 17% 0 9%;
 }
 .inner_banner.partner_banner {
-    min-height: 300px !important;
     background: #14222F;
-    padding: 8% 0;
 }
-.inner_banner.mission_banner {
-    padding: 9% 0 9%;
-    min-height: 600px;
-}
-section.fintech__banner {
-    height: 500px;
-    min-height: 300px !important;
-}
-section.fintech__banner img.desktop_banner {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+.dbw_list {
+    max-width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
 }
 }
 
@@ -207,9 +255,6 @@ footer {
 footer .footer_address a, footer .footer_address address {
 	margin-bottom: 20px;
 }
-.postid-63 .banner_title {
-	padding-top: 100px;
-}
 .service_wrapper .service_item, .casestudy_wrapper .case_item, .insight_wrapper .ins_item, .help_List .help_item {
     width: 33.33%;
 }
@@ -247,8 +292,11 @@ footer .footer_address a, footer .footer_address address {
     max-width: 900px;
     margin: 0 auto;
 }
-}
 
+.transform_your_data .row:nth-child(even) {
+    flex-direction: row !important;
+}
+}
 
 
 @media(min-width:576px){
@@ -281,10 +329,6 @@ footer .ftr_logos img {
 }
 #search.search-visible {
     height: 68px;
-}
-
-.inner_banner {
-    padding: 14% 0 18%;
 }
 .search_contact {
     width: 273px;
@@ -488,7 +532,7 @@ header .navbar .dropdown-menu {
 	height: 65px;
 }
 .inner_banner .banner_content {
-    max-width: 450px;
+    max-width: 600px;
 }
 .page-content {
     margin-top: 60px;
@@ -607,6 +651,34 @@ footer .ftr_logos img {
 .empowring_Sec {
     margin-bottom: 1rem;
 }
+.empowring_item {
+    margin-top: 1.5rem;
+}
+.health_dataintl .sec_image {
+    width: 100%;
+    margin-bottom: 1.25rem;
+}
+
+
+.event_data_sec .ed_item {
+    margin-bottom: 1.5rem;
+}
+.nrf_attends .sec_content {
+    margin-top: 15px;
+}
+.event_List .evnt_iner h4 {
+    font-size: 20px;
+}
+.partnerr_carousel .item img.cl_icon {
+    height: 40px;
+}
+.gama_event {
+    margin-top: 1.5rem;    
+}
+.open_platform .img_box {
+    padding: 2rem;
+    padding-top: 0;
+}
 }
 
 
@@ -656,13 +728,29 @@ img.desktop_banner {
 }
 img.mobile_banner {
     display: block;
-    max-height: 100vh;
-    object-fit: cover;
 }
-
 .inner_banner {
-    background: #14222E !important;
+/*    background: #14222E !important;*/
     padding: 100px 0 70px;
+    height: 310px;
+}
+img.mobile_banner {
+    height: 100%;
+    object-fit: cover;
+    object-position: top right;
+}
+.inner_banner .banner_title h1 {
+    font-size: 40px;
+}
+.inner_banner .banner_content {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.inner_banner .banner_content p {
+    margin-bottom: 0;
+}
+.inner_banner .btn_block {
+    margin-top: 1rem;
 }
 .client_wrapper .item img {
     height: 110px;
@@ -792,6 +880,9 @@ footer .large_dev {
 footer .small_dev {
     display: flex;
 }
+.hbspt-form form .hs_submit.hs-submit .hs-button {
+    top: 21px;
+}
 .blog_filter {
     margin-bottom: 2rem;
 }
@@ -841,9 +932,23 @@ footer .small_dev {
 .how_it_work .img_box img {
     margin: 0 auto;
 }
-	.cky-revisit-bottom-left {
-		bottom: 70px !important;
-	}
+.cky-revisit-bottom-left {
+	bottom: 70px !important;
+}
+.data_driven_logo span.cl_icon {
+    width: 50%;
+    text-align: center;
+}
+.data_driven_logo {
+    flex-wrap: wrap;
+    margin-top: 0 !important;
+}
+.gama_event .gevnt_item {
+    margin-top: 1.5rem;
+}
+.open_platform .content_box {
+    padding: 2rem;
+}
 }
 
 
@@ -869,11 +974,30 @@ footer .small_dev {
 #search input[type="search"], #search .close {
     height: 62px;
 }
+.button {
+    padding: 15px 20px;
+}
 header .navbar .navbar-brand {
     max-width: 140px;
 }
 .page-content {
     margin-top: 64px;
+}
+.inner_banner {
+    height: 380px;
+}
+img.mobile_banner {
+    object-position: unset;
+}
+.inner_banner .banner_title h1 {
+    font-size: 32px;
+}
+.inner_banner .banner_content {
+    font-size: 13px;
+    line-height: 1.5;
+}
+.inner_banner .button {
+    padding: 11px 20px;
 }
 .contact_frame .calendr__wrapper {
     padding: 10px;
@@ -925,7 +1049,6 @@ header .navbar .navbar-brand {
 .certificate_logo .logo_item, .source_logo .logo_item{
     width: 50%;
 }
-
 .certificate_logo .logo_item:last-child, .certificate_logo .logo_item:nth-last-child(2),
 .source_logo .logo_item:last-child, .source_logo .logo_item:nth-last-child(2) {
     border-bottom: 0;
@@ -954,7 +1077,7 @@ section.certificate_sec {
     background: url(../images/error-bg-mob.png) no-repeat center !important;
     background-size: cover !important;
 }
-.error_sec .btn_block {
+.error_sec .btn_block, .empowering_health h2 br {
     display: none;
 }
 .error_sec h1 {
@@ -1020,12 +1143,41 @@ section.certificate_sec {
 .help_List .help_item {
     width: 100%;
 }
+.centered_logos span.cl_icon img {
+    height: 50px;
+    margin: 10px 7px;
+}
+.wb_list .wb_item .item_inner {
+    padding: 1.25rem;
+}
+.unlocking_sec a.button.blue_btn {
+    margin-bottom: 20px;
+    margin-right: 0 !important;
+}
+.unlocking_sec .data_driven_logo.mt-4 {
+    text-align: center;
+}
+.hbspt-form form .hs_submit.hs-submit .hs-button {
+    top: 19px;
+}
+.gama_event .form_wrapper {
+    padding: 1rem;
+}
+.gama_event form .wpcf7-recaptcha div {
+    transform: scale(0.88);
+    -webkit-transform: scale(0.88);
+    transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
 }
 
 
 @media(max-width: 480px){
 h1, .get_started h2, .join_sec h2 {
     font-size: 40px;
+}
+h2 {
+    font-size: 28px;
 }
 .tech_active_bg:before, .banner_video:before {
     width: 200px;
@@ -1053,6 +1205,16 @@ h1, .get_started h2, .join_sec h2 {
 }
 .partnership_List .list_item {
     width: 100% !important;
+}
+.centr_partner .centered_logos span.cl_icon img {
+    height: 35px;
+}
+.centr_partner_col .centered_logos span.cl_icon img {
+    height: auto;
+    width: 90%;
+}
+.centr_partner_col .centered_logos span.cl_icon {
+    width: 32%;
 }
 }
 

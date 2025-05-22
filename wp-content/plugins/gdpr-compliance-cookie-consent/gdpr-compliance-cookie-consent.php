@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: GDPR Compliance & Cookie Consent
- * Plugin URI:  https://stylemixthemes.com/gdpr/
- * Description: The GDPR (General Data Protection Regulation) is a set of instructions for companies that collect and process EU user data on the Internet. The new regulation is aimed at improving the level of protection and giving EU residents wide control over their data.
+ * Plugin URI:  https://www.calculator.io/gdpr/
+ * Description: This plugin adds GDPR-compliant cookie management to websites, ensuring legal compliance and enhancing user privacy.
  * Author:      gdprcompliancewp
- * Author URI:  https://stylemixthemes.com/
+ * Author URI:  https://www.calculator.io/gdpr/
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Version:     1.4
+ * Version:     1.6.1
  * Text Domain: gdpr-compliance-cookie-consent
  * Domain Path: /languages
  */
@@ -50,8 +50,8 @@ class STM_GDPR
             add_action('admin_enqueue_scripts', array(STM_Helpers::getInstance(), 'stm_enqueue_admin_scripts'));
         }
 
-        if (STM_Helpers::stm_helpers_isEnabled(STM_GDPR_PREFIX . 'general', 'popup') && !STM_Cookie::getInstance()->stm_cookie_isAccepted()) {
-            if (!is_admin() && STM_Helpers::stm_helpers_cmb_get_option(STM_GDPR_PREFIX . 'general', 'block_cookies')) {
+        if (STM_Helpers::stm_helpers_isEnabled(STM_GDPR_PREFIX . 'general', 'popup')) {
+            if (!STM_Cookie::getInstance()->stm_cookie_isAccepted() && !is_admin() && STM_Helpers::stm_helpers_cmb_get_option(STM_GDPR_PREFIX . 'general', 'block_cookies')) {
                 add_action('template_redirect', array(STM_Cookie::getInstance(), 'stm_cookie_block_cookies'), 0);
                 add_action('shutdown', array(STM_Cookie::getInstance(), 'stm_cookie_block_cookies'), 0);
             }

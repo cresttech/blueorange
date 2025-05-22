@@ -13,6 +13,7 @@ import {
 } from '../../iframe/useBackgroundApp';
 import { refreshToken } from '../../constants/leadinConfig';
 import { getOrCreateBackgroundApp } from '../../utils/backgroundAppUtils';
+import { isRefreshTokenAvailable } from '../../utils/isRefreshTokenAvailable';
 
 interface IElementorMeetingSelectProps {
   url: string;
@@ -54,7 +55,7 @@ function ElementorMeetingSelect({
       ) : error ? (
         <ElementorBanner type="danger">
           {__(
-            'Please refresh your meetings or try again in a few minutes.',
+            'Please refresh your meetings or try again in a few minutes',
             'leadin'
           )}
         </ElementorBanner>
@@ -114,7 +115,9 @@ export default function ElementorMeetingsSelectContainer(
 ) {
   return (
     <BackgroudAppContext.Provider
-      value={refreshToken && getOrCreateBackgroundApp(refreshToken)}
+      value={
+        isRefreshTokenAvailable() && getOrCreateBackgroundApp(refreshToken)
+      }
     >
       <ElementorMeetingSelectWrapper {...props} />
     </BackgroudAppContext.Provider>

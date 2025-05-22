@@ -12,16 +12,19 @@
 get_header();
 ?>
 
-	<header class="page-header alignwide">
-		<h1 class="page-title"><?php esc_html_e( 'Nothing here', 'twentytwentyone' ); ?></h1>
-	</header><!-- .page-header -->
-
-	<div class="error-404 not-found default-max-width">
-		<div class="page-content">
-			<p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try a search?', 'twentytwentyone' ); ?></p>
-			<?php get_search_form(); ?>
-		</div><!-- .page-content -->
-	</div><!-- .error-404 -->
+<section class="error_sec wi_full" style="background-image: url(<?php the_field('image_404', 'options'); ?>), linear-gradient(to bottom, #192C47, #1B375F);">
+	<!-- <img src="<?php// echo site_url(); ?>/wp-content/uploads/2025/05/404.svg" class="pos_404"> -->
+    <div class="container-xxl position-relative">
+        <div class="sec_content text-center light_blue">
+        	<img src="<?php the_field('error_logo', 'options'); ?>" class="error_icon">
+			<h1 class="text-white"><?php the_field('title_404', 'options'); ?></h1>
+			<p><?php the_field('text_404', 'options'); ?></p>
+			<div class="btn_block justify-content-center">
+				<a href="<?php echo site_url(); ?>/" class="button orange_btn">Go back to home <i class="fas fa-angle-right"></i></a>
+			</div>
+        </div>
+    </div>
+</section>
 
 <?php
 get_footer();

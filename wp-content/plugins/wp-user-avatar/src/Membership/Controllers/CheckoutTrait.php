@@ -210,6 +210,10 @@ trait CheckoutTrait
 
         $should_validate_fields = [];
 
+        if ( ! is_user_logged_in() && apply_filters('ppress_checkout_is_registration_checked_enabled', true) && ! get_option('users_can_register')) {
+            $error_bucket->add('registration_disabled', esc_html__('Registration is disabled', 'wp-user-avatar'));
+        }
+
         // --------START ---------   validation for required fields ----------------------//
         foreach ($account_info_fields as $field_key => $field_settings) {
 
@@ -420,9 +424,7 @@ trait CheckoutTrait
 
             ppress_wp_new_user_notification($user_id, null, 'admin');
 
-            /**
-             * Fires after a user registration is completed.
-             */
+            /** Fires after a user registration is completed. */
             do_action('ppress_after_registration', 0, $user_data, $user_id, false);
         }
 

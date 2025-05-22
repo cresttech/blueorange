@@ -52,8 +52,11 @@
 			?>
 
 		<?php elseif ( is_search() ) : ?>
-
-			<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'twentytwentyone' ); ?></p>
+			<p>Search results: 0 posts</p>
+			<div class="serch_no_result">
+				<h3>No Results Found</h3>
+				<p>We didn’t find any posts for you search.</p>
+			</div>
 			<?php //get_search_form(); ?>
 
 		<?php else : ?>

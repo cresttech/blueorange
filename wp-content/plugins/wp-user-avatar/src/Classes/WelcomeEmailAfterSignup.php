@@ -23,6 +23,7 @@ class WelcomeEmailAfterSignup
     {
         $search = apply_filters('ppress_welcome_message_placeholder_search', [
             '{{username}}',
+            '{{userid}}',
             '{{password}}',
             '{{email}}',
             '{{site_title}}',
@@ -34,8 +35,9 @@ class WelcomeEmailAfterSignup
 
         $replace = apply_filters('ppress_welcome_message_placeholder_replace', [
             $this->wp_user->user_login,
+            $this->wp_user->ID,
             empty($this->password) ? esc_html__('[Your Password]', 'wp-user-avatar') : $this->password,
-            $this->wp_user->email,
+            $this->wp_user->user_email,
             ppress_site_title(),
             $this->wp_user->first_name,
             $this->wp_user->last_name,
@@ -56,7 +58,9 @@ class WelcomeEmailAfterSignup
 
         $message = apply_filters(
             'ppress_welcome_message_raw_content',
-            ppress_get_setting('welcome_message_email_content', ppress_welcome_msg_content_default(), true)
+            ppress_get_setting('welcome_message_email_content', ppress_welcome_msg_content_default(), true),
+            $this->wp_user,
+            $this->password
         );
 
         $message = $this->parse_placeholders($message);

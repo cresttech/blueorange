@@ -20,16 +20,6 @@ class FrontendProfileTag
         add_filter('wp_title', array($this, 'rewrite_profile_title'), 999999999, 1);
     }
 
-    /**
-     * Get currently logged in user object_data
-     *
-     * @return \WP_User
-     */
-    function get_current_user_data()
-    {
-        return wp_get_current_user();
-    }
-
     public function set_up_detected_profile()
     {
         global $ppress_frontend_profile_user_obj;
@@ -40,7 +30,7 @@ class FrontendProfileTag
 
         if (empty($who)) {
             if (is_user_logged_in()) {
-                $user = $this->get_current_user_data();
+                $user = wp_get_current_user();
             } else {
 
                 if (strpos($_SERVER['REQUEST_URI'], '/' . ppress_get_profile_slug() . '/') !== false) {
@@ -83,6 +73,8 @@ class FrontendProfileTag
      */
     public function user_profile_parser($atts)
     {
+        global $ppress_frontend_profile_user_obj;
+
         if ( ! is_user_logged_in() && ppress_get_setting('disable_guests_can_view_profiles') == 'on') {
             return wpautop(sprintf(
                 __('This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-avatar'),
@@ -102,6 +94,8 @@ class FrontendProfileTag
         if ( ! empty($atts['user-id'])) {
 
             $user = apply_filters('ppress_frontend_profile_wp_user_object', get_user_by('ID', absint($atts['user-id'])));
+
+            $ppress_frontend_profile_user_obj = $user;
 
             // we are instantiating the class directly because it has already been called by set_up_detected_profile hooked into wp
             // action. If we had used the singleton instance method, it would have returned the previous instance.

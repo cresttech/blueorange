@@ -1,5 +1,136 @@
 ﻿== Changelog ==
 
+= 4.15.25 =
+* Fixed bug with frontend JS script loading.
+
+= 4.15.24 =
+* Added ppress_payment_processing_message filter.
+* Added ppress_md_profile_bio filter.
+* Added ppress_registration_should_send_welcome_email filter.
+* Added additional params to ppress_welcome_message_raw_content filter.
+* Added translation support for checkout fields label.
+* Added userID placeholder to welcome email.
+* Added Threads and Bluesky social icons.
+* Added Copy button for shortcodes to plans, groups and form pages.
+* Added support for file upload field when custom fields are added in emails.
+* Fixed bug where slash could appear in membership plan name.
+* Fixed bug where recaptcha didn’t work on plan upgrade checkout.
+* Fixed bug with profile image cropping not working.
+
+= 4.15.23 =
+* Added ppress_subscription_after_expired_reminder_email_enabled filter
+* Added ppress_membership_subscription_expired_email_enabled filter
+* Added a filter to modify user roles in search filter.
+* Fixed bug where content protection excerpt generation can fail
+* Fixed bug where restricted template didn’t display global restricted message.
+* Fixed bug where marking a checkout field as not required didn’t work.
+
+= 4.15.22 =
+* Added a filter for specifying payment method based on plan ID.
+* Added ppress_subscription_buffer_seconds filter.
+* Added filtering by user role to Member Directory.
+* Inverted the logic of content protection.
+* Fixed: Function _load_textdomain_just_in_time was called incorrectly.
+* Fixed email placeholder not working for welcome email
+* Switch to using home_url() from site_url() for login redirect.
+* Disabled buffer on expiration cron job when a subscription is cancelled.
+* Redirect to My Account page if previous url after login is the password reset page.
+* Added double-check to ensure subscription is expired before sending subscriptionExpired email.
+
+= 4.15.21 =
+* Added shortcode support to Resrricred Page template in content protection.
+* Added ppress_checkout_is_registration_checked_enabled filter.
+* Added ppress_frontend_profile_url filter.
+* Disable processing page when on bank transfer payment method.
+* Disable checking if registration is enabled during checkout if user is logged in.
+* Fixed bug where textarea data in user profile lack newlines.
+* Fixed broken html on agreeable field.
+* Fixed bug where stripe amount could be negative integer.
+
+= 4.15.20.1 =
+* Disable registration via checkout if "user can register" is not enabled.
+
+= 4.15.20 =
+* Added ppress_content_protection_ignore_post_excerpt filter.
+* Added ppress_user_avatar_image_url filter.
+* Added {{order_coupon}} placeholder to order emails.
+* Fixed customer search in admin dashboard not working correctly.
+* Fixed various XSS reported by Cleantalk.
+* Fixed duplicate queries detected by Query Monitor.
+* Fixed fatal error that might occur from changing default login page url.
+* Switched to using core Codemirror library.
+* Fixed couple of PHP errors and warnings.
+
+= 4.15.19 =
+* Security fix where protected content was exposed via WP and Rest API search.
+* Upgraded Stripe PHP SDK to 16.3.
+* Fixed bug with incorrect insertion of ob_start().
+
+= 4.15.18 =
+* Added ppress_checkout_disable_payment_for_zero_initial_payment filter to disable payment when initial amount is zero.
+* Added filter to disable tab widget user registration.
+* Fixed bug where restricted content could be accessed via rest api.
+* Fixed icon error in admin css.
+* Fixed bug with multiple display of login remember label.
+
+= 4.15.17 =
+* Fixed bug that displays double 'tripple-mdash' in billing state field.
+* Fixed bug where country/state field ID instead of title was displayed in member directory & user profile.
+* Improved content protection compatibility with WooCommerce.
+
+= 4.15.16 =
+* Fixed fatal error: Uncaught ValueError.
+* Bumped Stripe API version to 2024-06-20.
+
+= 4.15.15 =
+* Improved support for cache-heavy hosting like WPEngine and Pantheon.
+* Fixed XSS on plan edit page metabox and builder form field label.
+* Improve compatibility with jQuery 4.
+
+= 4.15.14 =
+* Added WooCommerce compatibility to content protection where add-to-cart button is hidden for restricted product.
+* Added ppress_is_checkout_autoscroll_enabled filter to disable checkout autoscroll feature.
+* Updated Twitter social login to X.
+* Remove deprecated jQuery codes.
+
+= 4.15.13 =
+* Pro: [WooCommerce Memberships feature](https://profilepress.com/article/create-woocommerce-membership-website/?ref=changelog)
+* Added setting for disabling My Account tabs.
+* Fixed date_created time bug with manual order.
+* Fixed bug where expired coupons could be used via URL.
+
+= 4.15.12 =
+* Added uncode theme compatibility to content protection feature.
+* Fixed bugs with Stripe tax update after order.
+* Fixed bug where manual order didn't include subtotal.
+
+= 4.15.11 =
+* Enhancement: Update order tax amount in if Stripe charges tax.
+* Added filter to remove cover photo uploader field from default profile page.
+* Fixed: Undefined array key 'exempt' warning.
+
+= 4.15.10 =
+* Added exemption to content protection.
+* Fixed bug where Tutor course in multiple plans didn't exactly work correctly
+* Fixed bug where subscription was not revoked when unpaid in Stripe.
+* Enhancement: Stopped ucwords-ing displayname profile information.
+* Improved checkout compatibility with Pantheon hosting.
+
+= 4.15.9 =
+* Fixed bug where zero amount checkout didn't work when autorenewal is enabled.
+
+= 4.15.8 =
+* Fixed Stripe bug where payment method not saving for zero amount orders.
+
+= 4.15.7 =
+* Added filter to for changing Tutor LMS subscribe button.
+* Added filters to order and subscriptions email recipients.
+
+= 4.15.6 =
+* Fixed bug where Stripe sometimes fails to make payment method default.
+* Fixed XSS on registration checkbox field label.
+* Added ppress_content_protection_is_protection_disabled filter.
+
 = 4.15.5 =
 * Added custom field support to account welcome email
 * Improve checkout verbiage when auto-renewal is disabled

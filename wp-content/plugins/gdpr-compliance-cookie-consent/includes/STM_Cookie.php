@@ -19,21 +19,14 @@ class STM_Cookie
 
     public function stm_cookie_displayPopup()
     {
-        $user_from_eu = false;
-        $user_from_eu = apply_filters('stm_gdpr_return_false', $user_from_eu);
-
-        if($user_from_eu){
-            return true;
-        }
-
         $settings = STM_Helpers::stm_helpers_cmb_get_option(STM_GDPR_PREFIX . 'general');
         $privacy = STM_Helpers::stm_helpers_cmb_get_option(STM_GDPR_PREFIX . 'privacy');
         $privacy_link = (!empty($privacy['privacy_page'])) ? get_page_link($privacy['privacy_page']) : '#';
         $button_text = (!empty($settings['button_text'])) ? STM_Helpers::stm_helpers_dynamic_string_translation( $settings['button_text'] ) : __('Ok, I agree', 'gdpr-compliance-cookie-consent');
 
-        $popup = '<div id="stm_gdpr_popup-main" class="stm_gdpr_popup-main" style="background-color: ' . $settings['popup_bg_color'] . '; color: ' . $settings['popup_text_color'] . ';
+        $popup = '<div id="stm_gdpr_popup-main" class="stm_gdpr_popup-main" style="display: ' . (STM_Cookie::getInstance()->stm_cookie_isAccepted() ? 'none' : 'block') . ';background-color: ' . $settings['popup_bg_color'] . '; color: ' . $settings['popup_text_color'] . ';
 		' . str_replace('_', ': 20px; ', esc_attr($settings['popup_position'])) . '">
-			<div class="stm_gdpr_popup-content">' . STM_Helpers::stm_helpers_dynamic_string_translation( $settings['popup_content'] ) . '</div>
+            <div class="stm_gdpr_popup-content">' . STM_Helpers::stm_helpers_dynamic_string_translation( $settings['popup_content'] ) . STM_Helpers::stm_helpers_get_commitment() . '</div>
 			<div class="stm_gdpr_popup-links">
 				<a href="#" id="stm_gdpr_popup_accept" class="stm_gdpr_popup-accept">' . $button_text . '</a>
 				<a href="' . $privacy_link . '" class="stm_gdpr_popup-privacy">' . STM_Helpers::stm_helpers_dynamic_string_translation( $privacy['link_text'] ) . '</a>

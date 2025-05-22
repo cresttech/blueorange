@@ -3,8 +3,8 @@ Contributors: gdprcompliancewp
 Donate link: https://www.calculator.io/
 Tags: gdpr, cookie consent, gdpr compliance, privacy policy, cookie banner
 Requires at least: 4.6
-Tested up to: 6.5
-Stable tag: 1.4
+Tested up to: 6.5.2
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,15 +84,6 @@ Fines of up to €20 million or up to 4% of the annual worldwide turnover of the
 
 The GDPR Compliance & Cookie Consent WordPress Plugin makes your website compatible with general GDPR regulations. This ensures that both you, the business owner, and your customers who are visiting your site and possibly providing sensitive data are protected under the laws.
 
-## More Awesome Free Plugins by Stylemix
-
-⭐ [Cost Calculator & Price Estimation Plugin](https://wordpress.org/plugins/cost-calculator-builder/)
-⭐ [Zoom Meetings and Webinars Plugin — eRoom](https://wordpress.org/plugins/eroom-zoom-meetings-webinar/)
-⭐ [BookIt - a free booking calendar plugin](https://wordpress.org/plugins/bookit/)
-⭐ [MasterStudy - All-in-One WordPress LMS Plugin](https://wordpress.org/plugins/masterstudy-lms-learning-management-system/)
-⭐ [Free Classifieds and Listings Plugin - uListing](https://wordpress.org/plugins/ulisting/)
-
-
 == Screenshots ==
 
 1. GDPR
@@ -106,6 +97,12 @@ The GDPR Compliance & Cookie Consent WordPress Plugin makes your website compati
 3. Set Up Page in Menu -> GDPR.
 
 == Changelog ==
+
+= 1.6 =
+* Added default values. Popup enabled by default
+
+= 1.5 =
+* Minor bug fix.
 
 = 1.4 =
 * Minor bug fix.

@@ -284,44 +284,6 @@ class STM_PluginOptions
         $pro_version_deactivate = true;
         $pro_version_deactivate = apply_filters('stm_gdpr_pro_version_activate', $pro_version_deactivate);
 
-        if ($pro_version_deactivate) {
-            /* Pro version */
-
-            $stm_lock = '  <div class="stm-icon-lock">
-                             <div class="stm-lock-top-1"></div>
-                             <div class="stm-lock-top-2"></div>
-                             <div class="stm-lock-body"></div>
-                             <div class="stm-lock-hole"></div>
-                           </div><a href="https://stylemixthemes.com/plugins/" class="stm_title">' . esc_html__('GDPR PRO', 'gdpr-compliance-cookie-consent') . '</a>';
-            $stm_lock .= '	<div id="stm-features"><h1 class="stm-title-features">' . esc_html__('GDPR PRO FEATURES', 'gdpr-compliance-cookie-consent') . '</h1>
-                            <ol class="stm-new-features-list">
-                                <li><a>' . __('Geo Location', 'gdpr-compliance-cookie-consent') . '</a></a></li>
-                                <li><a>' . __('Cookie Scanner', 'gdpr-compliance-cookie-consent') . '</a></li>      
-                                <li><a>' . __('Additional Cookies', 'gdpr-compliance-cookie-consent') . '</a></li>                                                      
-                                <li><a>' . __('Iframe/Video Blocker', 'gdpr-compliance-cookie-consent') . '</a></li>                                
-                                <li><a>' . __('Settings Import/Export', 'gdpr-compliance-cookie-consent') . '</a></li>
-                            </ol></div>';
-
-            $pro_version = $cmb_options->add_field(array(
-                'id' => STM_GDPR_PREFIX . 'pro_version',
-                'type' => 'group',
-                'repeatable' => false,
-                'before_group' => '<div class="tab-content" id="pro_version">',
-                'after_group' => '</div>',
-                'options' => array(
-                    'group_title' => __('GDPR PRO', 'gdpr-compliance-cookie-consent'),
-                    'sortable' => false,
-                    'show_as_tab' => true
-                )
-            ));
-
-            $cmb_options->add_group_field($pro_version, array(
-                'name' => __('', 'gdpr-compliance-cookie-consent'),
-                'desc' => $stm_lock,
-                'id' => 'button-class',
-                'type' => 'title',
-            ));
-        }
     }
 
     public static function getInstance()

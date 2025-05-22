@@ -27,7 +27,7 @@ class ImmutableException extends BaseRuntimeException implements RuntimeExceptio
      * @param int            $code
      * @param Throwable|null $previous
      */
-    public function __construct($value, $code = 0, Throwable $previous = null)
+    public function __construct($value, $code = 0, ?Throwable $previous = null)
     {
         $this->value = $value;
         parent::__construct("{$value} is immutable.", $code, $previous);
@@ -37,7 +37,7 @@ class ImmutableException extends BaseRuntimeException implements RuntimeExceptio
      *
      * @return string
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }

@@ -655,6 +655,7 @@ if ( ! function_exists( 'wp_get_list_item_separator' ) ) :
 endif;
 
 require_once('bs4navwalker.php');
+include('wp_bootstrap_navwalker.php');
 /* SVG Support */
 function add_file_types_to_uploads($file_types){
 $new_filetypes = array();
@@ -678,7 +679,7 @@ register_post_type('technologies',
 				'menu_position' => 6,
 				) );
 }
-add_action('init', 'register_technologies');
+//add_action('init', 'register_technologies');
 
 function register_services() {
 register_post_type('services',
@@ -707,7 +708,7 @@ register_post_type('case-studies',
 				'rewrite' => array('slug' => ''),
 				'query_var' => true,
 				'has_archive' => true,
-				'supports' => array('title','editor','thumbnail'),
+				'supports' => array('title','editor','thumbnail','excerpt'),
 				'menu_position' => 6,
 				) );
 }
@@ -760,7 +761,7 @@ function case_studies_tags_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -799,7 +800,7 @@ function technology_studies_tags_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -839,7 +840,7 @@ function industries_studies_tags_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -890,7 +891,7 @@ function blog_custom_post_type() {
 		'labels'                => $labels,
 		'supports'              => array( 'title', 'editor', 'thumbnail' ),
 		'taxonomies'            => array( 'blog_tag' ),
-		'hierarchical'          => false,
+		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
 		'show_in_menu'          => true,
@@ -936,7 +937,7 @@ function blogs_tags_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -975,7 +976,7 @@ function blogs_technology_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -1015,7 +1016,7 @@ function blogs_industries_taxonomy() {
 	);
 	$args = array(
 		'labels'                     => $labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,
@@ -1032,24 +1033,81 @@ function search_filter($query) {
     if ( !is_admin() && $query->is_main_query() ) {
         if ( $query->is_search ) {
 
+        	$blog_tags = $techtags = $indtags = [];
         	if ( isset( $_GET['post_type'] ) ) {
 				$query->set( 'post_type', $_GET['post_type'] );
 			}
+            
+            if ( isset( $_GET['tags'] ) && (count($_GET['tags']) > 0) ) {
+            	$blog_tags = $_GET['tags'];
+            	$tax_blog_tags = $_GET['tax_blog_tags'];
 
-            $tags = $_GET['tags'];
-            if ( isset( $_GET['tags'] ) && $_GET['tags'] != '' ) {
-                $query->set( $_GET['tag_name'], $tags );
+                $query->set( $tax_blog_tags, $blog_tags );
+                //$query->set( 'blog_tags', $blog_tags );
             }
-			$tags2 = $_GET['techtags'];
-            if ( isset( $_GET['techtags'] ) && $_GET['techtags'] != '' ) {
-                $query->set( $_GET['tag_names'], $tags2 );
-            }
-			$tags3 = $_GET['indtags'];
-            if ( isset( $_GET['indtags'] ) && $_GET['indtags'] != '' ) {
-                $query->set( $_GET['indtag_name'], $tags3 );
-            }
+			
+            if ( isset( $_GET['techtags'] ) && (count($_GET['techtags']) > 0) ) {
+            	$techtags = $_GET['techtags'];
+            	$tax_technology_tags = $_GET['tax_technology_tags'];
 
-		}   
-	}   
+                $query->set( $tax_technology_tags, $techtags );
+                //$query->set( 'technology_tags', $techtags );
+
+            }
+			
+            if ( isset( $_GET['indtags'] ) && (count($_GET['indtags']) > 0) ) {
+            	$indtags = $_GET['indtags'];
+            	$tax_industries_tags = $_GET['tax_industries_tags'];
+            	//$indtag_name = $_GET['indtag_name'];
+
+                $query->set( $tax_industries_tags, $indtags );
+                //$query->set( 'industries_tags', $indtags );
+            }
+		} 
+	} 
 }
 add_action('pre_get_posts','search_filter');
+
+
+
+//[case-studies-logos]
+add_shortcode( 'case-studies-logos', 'case_studies_logos' );
+function case_studies_logos() {
+	global $post;
+	$post_id = $post->ID;
+
+	$html = '';
+
+	if( have_rows('conclusion_logos', $post_id) ): 	    
+		$html .= '<div class="conclusion_logos">';
+			$html .= '<div class="conclusion_carousel owl-carousel">';
+		    while( have_rows('conclusion_logos', $post_id) ): the_row(); 
+		       	$html .= '<div class="item">';
+			       	$html .= '<span class="cl_icon">';
+			        	$html .= '<img src="'.get_sub_field('logo').'">';
+			        $html .= '</span>';
+			    $html .= '</div>';
+		    endwhile; 
+		    $html .= '</div>';
+	    $html .= '</div>';
+	endif; 
+
+	return $html;
+}
+
+
+
+add_action('admin_head', 'blueorange_admin_CSS');
+
+function blueorange_admin_CSS() {
+  echo '<style>
+    #acf-group_66433bc9ed4ab ul.acf-radio-list.acf-bl li img {
+	    width: 200px;
+	}
+
+	body.index-php .acf-admin-notice.notice.acf-escaped-html-notice.notice-error, body.plugins-php .acf-admin-notice.notice.acf-escaped-html-notice.notice-error {
+	    display: none;
+	}
+	
+  </style>';
+}
