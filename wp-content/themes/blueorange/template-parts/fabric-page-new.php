@@ -48,6 +48,25 @@ get_header();
         </div>
     </div>
 </section>
+<section class="why_we_stand wi_full py_3">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-lg-10 col-xxl-9 mx-auto">
+                <div class="sec_title text-center light_grey">
+                    <div class="subtitle text-uppercase"><?php the_field('sub_heading_8'); ?></div>
+                    <h2 class="text-uppercase text_color"><?php the_field('heading_8'); ?></h2>
+                    <?php the_field('content_8'); ?>
+                </div>
+                <div class="stand_logos">
+					<?php if( have_rows('logos_w') ):
+					while ( have_rows('logos_w') ) : the_row();	?>
+						<div class="logo_item"><img src="<?php the_sub_field('logo'); ?>"></div>
+					<?php endwhile; endif;?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <section class="data_services wi_full py_3">
     <div class="container-xxl">
         <div class="row align-items-end" data-aos="fade-up" data-aos-duration="1500">
