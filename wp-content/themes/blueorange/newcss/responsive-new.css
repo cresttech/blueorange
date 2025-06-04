@@ -6,8 +6,13 @@
     right: 150px;
 }
 .video_sec {
+    .video_wrapper {
+        height: 435px;
+    }
     video {
-        height: 435px !important;
+        height: calc(100% + 150px);
+        object-fit: cover;
+        cursor: pointer;
     }
 }
 .banner_sec {
@@ -620,8 +625,8 @@ footer {
     }
 }
 .video_sec {
-    video {
-        height: 410px;
+    .video_wrapper {
+        height: 445px;
     }
 }
 .why-bo-list {
@@ -932,6 +937,9 @@ footer {
         }
     }
 }
+.stand_logos {
+    gap: 10px;
+}
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
@@ -1023,6 +1031,11 @@ footer {
 }
 .main_banner {
 	padding-top: 100px;
+}
+.video_sec {
+    .video_wrapper {
+        height: 345px;
+    }
 }
 .services_list_container {
     .service--item {
@@ -1188,8 +1201,8 @@ footer {
 }
 }	
 .video_sec {
-    video {
-        height: 230px;
+    .video_wrapper {
+        height: 310px;
     }
 }
 .overview_collaboration {
@@ -1253,5 +1266,11 @@ footer {
         }
     }
 }
+}
+.stand_logos {
+    flex-wrap: wrap;
+    .logo_item {
+        width: 48%;
+    }
 }
 }

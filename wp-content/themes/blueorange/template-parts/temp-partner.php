@@ -47,14 +47,16 @@ get_header();
 					while ( have_rows('partnerships') ) : the_row();	?>
                     <div class="list--item">
                         <div class="item--inner light_blue">
+							<?php if(get_sub_field('link') != '') {?><a href="<?php the_sub_field('link'); ?>"><?php } ?>
                             <div class="icon_btn">
                                 <img src="<?php the_sub_field('image'); ?>" class="ico_msg">
 								<?php if(get_sub_field('link') != '') {?>
-									<a href="<?php the_sub_field('link'); ?>" class="more_button"><img src="<?php bloginfo('template_url') ?>/newimages/arrow_upward.svg" alt="#"></a>
+									<div class="more_button"><img src="<?php bloginfo('template_url') ?>/newimages/arrow_upward.svg" alt="#"></div>
 								<?php } ?>
                             </div>
                             <h4 class="text-white"><?php the_sub_field('title'); ?></h4>
                             <?php the_sub_field('text'); ?>
+							<?php if(get_sub_field('link') != '') {?></a><?php } ?>
                         </div>
                     </div>
 					<?php endwhile; endif;?>

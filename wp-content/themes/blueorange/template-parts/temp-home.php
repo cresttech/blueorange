@@ -208,7 +208,7 @@ get_header();
             <div class="col-lg-6">
                 <div class="tab-content" id="strategyTabContent">
 					<?php 
-					$args = array( 'post_type' => 'case-studies' , "order" => "DESC", 'posts_per_page' => '4',);
+					$args = array( 'post_type' => 'case-studies' , "order" => "DESC", 'post__in' => $postidss);
 					$query = new WP_Query( $args ); 
 					if ( $query->have_posts() ) { 
 					$count = 1;
