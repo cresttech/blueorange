@@ -365,7 +365,8 @@ input[type="search"]::-webkit-search-results-decoration {
 	}
 	.menu > ul > li {
 		display: inline-block;
-		margin-left: 25px;
+		padding: 0 25px;
+		cursor: pointer;
 	}
 	.menu > ul > li > a {
 		font-size: var(--bs-fs16);

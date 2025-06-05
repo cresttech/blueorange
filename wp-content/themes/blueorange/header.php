@@ -52,7 +52,10 @@
 </head>
 
 <body <?php body_class(); ?>>
-<?php wp_body_open(); ?>
+<?php wp_body_open();
+global $post;
+$parent_id = $post->post_parent;
+ ?>
 
 <header id="header">
     <div class="container-xxl position-relative">
@@ -75,7 +78,7 @@
                         <!-- <li>
                             <a href="#">Home</a>
                         </li> -->
-                        <li class="menu-item-has-children">
+                        <li class="menu-item-has-children <?php if(is_singular( 'services' )) { echo 'active'; } ?>">
                             <a href="#">Services <i class="fas fa-angle-down"></i></a>
                             <div class="sub-menu mega-menu mega-menu-column-4">
                                 <div class="list-item col_equal_3">
@@ -107,7 +110,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu-item-has-children">
+                        <li class="menu-item-has-children <?php if($parent_id == 701) { echo 'active'; } ?>">
                             <a href="#">Industries <i class="fas fa-angle-down"></i></a>
                             <div class="sub-menu mega-menu mega-menu-column-4">
                                 <div class="list-item col_equal_3">
@@ -139,7 +142,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu-item-has-children">
+                        <li class="menu-item-has-children <?php if(is_page(array(2714)) || is_archive() ) { echo 'active'; } ?>">
                             <a href="#">Resources <i class="fas fa-angle-down"></i></a>
                             <div class="sub-menu mega-menu mega-menu-column-4">
                                 <div class="list-item col_equal_2">
@@ -176,7 +179,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu-item-has-children">
+                        <li class="menu-item-has-children <?php if(is_page(array(924, 3265, 590))) { echo 'active'; } ?>">
                             <a href="#">Partners <i class="fas fa-angle-down"></i></a>
                             <div class="sub-menu mega-menu mega-menu-column-4">
                                 <div class="list-item col_equal_3">
@@ -208,7 +211,8 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu-item-has-children">
+						
+                        <li class="menu-item-has-children <?php if(is_page(array(479, 520))) { echo 'active'; } ?>">
                             <a href="#">About <i class="fas fa-angle-down"></i></a>
                             <div class="sub-menu mega-menu mega-menu-column-4">
                                 <div class="list-item col_equal_3">
@@ -248,11 +252,11 @@
             </div>
             <!-- menu end here -->
             <div class="header-item item-right">
-                <button type="button" class="search_btn"><img src="<?php echo site_url(); ?>/wp-content/uploads/2024/04/search-icon.svg"></button>
+                <button type="button" class="search_btn d-none"><img src="<?php echo site_url(); ?>/wp-content/uploads/2024/04/search-icon.svg"></button>
                 <a href="/contact-us" class="contact_btn_desktop">Contact Us <i class="fas fa-angle-right"></i></a>
                 <!-- mobile menu trigger -->
                 <div class="mobile-menu-trigger"><span></span> </div>
-                <div id="search"> 
+                <div id="search" class="d-none"> 
                     <form role="search" id="searchform" action="/" method="get">
                         <span class="close"><i class="fas fa-times"></i></span>
                         <input value="<?php the_search_query(); ?>" name="s" type="search" placeholder="Search..."/>
