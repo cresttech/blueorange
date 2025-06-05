@@ -1111,3 +1111,14 @@ function blueorange_admin_CSS() {
 	
   </style>';
 }
+
+function scroll_to_top_on_load() {
+    ?>
+    <script type="text/javascript">
+        window.addEventListener('load', function () {
+            window.scrollTo(0, 0);
+        });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'scroll_to_top_on_load');
