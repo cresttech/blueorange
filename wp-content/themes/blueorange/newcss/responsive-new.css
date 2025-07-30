@@ -5,11 +5,11 @@
 #search {
     right: 150px;
 }
-.video_sec {
+/*.video_sec {
     video {
         height: 435px !important;
     }
-}
+}*/
 .banner_sec {
     .real_estate_bnr_logo {
         .client--wrapper {
@@ -177,7 +177,7 @@
 .msfabric_tabs.b_service_sec {
     .case--tabs-wrapper {
         .tab--data.sec_bgimg {
-            height: 500px;
+            height: 380px;
         }
     }
 }
@@ -621,11 +621,11 @@ footer {
         padding: 120px 0 50px;
     }
 }
-.video_sec {
+/*.video_sec {
     video {
         height: 410px;
     }
-}
+}*/
 .why-bo-list {
     .list--item {
         width: 50%;
@@ -1175,6 +1175,10 @@ footer {
         }
     }
 }
+.fab_max_text {
+    flex-direction: column;
+    align-items: flex-start;
+}
 }
 
 @media (max-width: 480.98px) {
@@ -1192,11 +1196,11 @@ footer {
     }
 }
 }   
-.video_sec {
+/*.video_sec {
     video {
         height: 230px;
     }
-}
+}*/
 .overview_collaboration {
     .collab_list {
         .list--item {

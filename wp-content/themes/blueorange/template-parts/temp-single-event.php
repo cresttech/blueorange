@@ -13,10 +13,13 @@ get_header();
                 <h1 class="text-uppercase mb-lg-0"><?php the_field('heading_1'); ?></h1>
             </div>
             <div class="col-lg-6 ml-auto content_col light_blue">
-                <?php the_field('content_1'); ?>
+                <?php the_field('content_1'); 
+				if(get_field('button_link_1') != '' && get_field('button_text_1') != '') {
+				?>
                 <div class="btn_block">
                     <a href="<?php the_field('button_link_1'); ?>" class="button orange_btn" target="_blank"><?php the_field('button_text_1'); ?> <i class="fa-solid fa-angle-right"></i></a>
                 </div>
+				<?php } ?>
             </div>
         </div>
         <div class="banner_logos_event" data-aos="fade-up" data-aos-duration="2500">
@@ -126,6 +129,12 @@ get_header();
 							<?php } ?>
                         </div>
                     </div>
+					<?php if(get_sub_field('luma_button_link') != '') { ?>
+						<div class="lumabtn mt-4">
+							<a href="<?php the_sub_field('luma_button_link'); ?>" class="luma-checkout--button" data-luma-action="checkout" data-luma-event-id="<?php the_sub_field('event_id'); ?>" >Register for Event</a>
+						</div>
+					<?php } ?>
+
                 </div>
 				<?php } else { ?>
                 <div class="col-md-6 ed_item">
@@ -146,6 +155,11 @@ get_header();
 							</div>
 							<?php } ?>
                         </div>
+						<?php if(get_sub_field('luma_button_link') != '') { ?>
+						<div class="lumabtn mt-4">
+							<a href="<?php the_sub_field('luma_button_link'); ?>" class="luma-checkout--button" data-luma-action="checkout" data-luma-event-id="<?php the_sub_field('event_id'); ?>" >Register for Event</a>
+						</div>
+						<?php } ?>
                     </div>
                 </div>
 				<?php } endwhile; endif;?>
@@ -159,8 +173,6 @@ get_header();
             </div>
             <?php echo do_shortcode(get_field('form_shortcode')); ?>
         </div>
-		<?php } else { ?>
-		<?php echo get_field('button_script'); ?>
 		<?php } ?>
     </div>
 </section>
@@ -240,4 +252,5 @@ get_header();
     </div>
 </section>
 </div>
+<script id="luma-checkout" src="https://embed.lu.ma/checkout-button.js"></script>
 <?php get_footer(); ?>

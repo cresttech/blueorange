@@ -15,7 +15,7 @@ $pdf_insight = get_field('pdf_insight', $pageid);
 ?>
 <div class="page-footer">
 <img src="" class="fix_pos d-none">
-<?php if ( !is_search() ) { ?>
+<?php if ( !is_search()) { ?>
 <div class="get__started wi_full py_3">
     <div class="container-xxl">
         <div class="sec__bg">
@@ -24,7 +24,7 @@ $pdf_insight = get_field('pdf_insight', $pageid);
             </video>
             <div class="sec_title text-center mb-2 position-relative">
                 <h2 class="text-uppercase"><?php if(get_field('heading_hero', $pageid) != '') { the_field('heading_hero', $pageid); } else { the_field('text', 'options'); } ?></h2>
-                <?php if(get_field('content_hero', $pageid) != '') { the_field('content_hero', $pageid); } ?>
+                <?php if(get_field('content_hero', $pageid) != '') { the_field('content_hero', $pageid); } else { the_field('content_hero_s', 'options'); } ?>
             </div>
             <div class="btn_block justify-content-center position-relative">
                 <?php
@@ -33,12 +33,16 @@ $pdf_insight = get_field('pdf_insight', $pageid);
                     } else {
                         $button_link = '';
                     }
-				if(get_field('button_text_hero', $pageid) != '') {
+				if($pageid != 518) { 
+				if(get_field('luma_event_id', $pageid) != '') { ?>
+				<a href="<?php the_field('button_link_hero', $pageid); ?>" class="luma-checkout--button button" data-luma-action="checkout" data-luma-event-id="<?php the_field('luma_event_id', $pageid); ?>" ><?php the_field('button_text_hero', $pageid); ?></a>
+				<?php }
+				elseif(get_field('button_text_hero', $pageid) != '') {
                 ?>
                 <a href="<?php the_field('button_link_hero', $pageid); ?>" class="button orange_btn"><?php the_field('button_text_hero', $pageid); ?> <i class="fa-solid fa-angle-right"></i></a>
 				<?php } else { ?>
                 <a href="<?php echo $button_link; ?>" class="button orange_btn"><?php the_field('button_text', 'options'); ?> <i class="fa-solid fa-angle-right"></i></a>
-				<?php } ?>
+				<?php } } ?>
             </div>
         </div>
     </div>
@@ -93,7 +97,6 @@ $pdf_insight = get_field('pdf_insight', $pageid);
     						<li><a href="/about-us/">About Us</a></li>
     						<li><a href="/leadership-team/">Leadership Team</a></li>
     						<li><a href="https://blue-orange-digital.breezy.hr/" target="_blank">Careers</a></li>
-    						<li><a href="/privacy-policy/">Privacy Policy</a></li>
 						</ul>
 						<div class="col_heading">Partners</div>
 						<ul>
@@ -166,62 +169,68 @@ $('#search .close').on('click', function(){
 
 <!-- Site Header Menu -->
 <script>
-    const menu = document.querySelector(".menu");
-    const menuMain = menu.querySelector(".menu-main");
-    const goBack = menu.querySelector(".go-back");
-    const menuTrigger = document.querySelector(".mobile-menu-trigger");
-    const closeMenu = menu.querySelector(".mobile-menu-close");
-    let subMenu;
-    menuMain.addEventListener("click", (e) =>{
-    if(!menu.classList.contains("active")){
-        return;
-    }
-    if(e.target.closest(".menu-item-has-children")){
-     const hasChildren = e.target.closest(".menu-item-has-children");
-      showSubMenu(hasChildren);
-    }
-    });
-    goBack.addEventListener("click",() =>{
-     hideSubMenu();
-    })
-    menuTrigger.addEventListener("click",() =>{
-     toggleMenu();
-    })
-    closeMenu.addEventListener("click",() =>{
-     toggleMenu();
-    })
-    document.querySelector(".menu-overlay").addEventListener("click",() =>{
-    toggleMenu();
-    })
-    function toggleMenu(){
-    menu.classList.toggle("active");
-    document.querySelector(".menu-overlay").classList.toggle("active");
-    }
-    function showSubMenu(hasChildren){
-    subMenu = hasChildren.querySelector(".sub-menu");
-    subMenu.classList.add("active");
-    subMenu.style.animation = "slideLeft 0.5s ease forwards";
-    const menuTitle = hasChildren.querySelector("i").parentNode.childNodes[0].textContent;
-    menu.querySelector(".current-menu-title").innerHTML=menuTitle;
-    menu.querySelector(".mobile-menu-head").classList.add("active");
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const menu = document.querySelector(".menu");
+  const menuMain = document.querySelector(".menu-main");
+  const menuTrigger = document.querySelector(".mobile-menu-trigger");
+  const closeMenu = document.querySelector(".mobile-menu-close");
+  const overlay = document.querySelector(".menu-overlay");
 
-    function  hideSubMenu(){  
-    subMenu.style.animation = "slideRight 0.5s ease forwards";
-    setTimeout(() =>{
-       subMenu.classList.remove("active");  
-    },300); 
-    menu.querySelector(".current-menu-title").innerHTML="";
-    menu.querySelector(".mobile-menu-head").classList.remove("active");
-    }
+  function toggleMenu() {
+    const isActive = menu.classList.toggle("active");
+    overlay.classList.toggle("active");
+    document.body.classList.toggle("menu-open", isActive);
+  }
 
-    window.onresize = function(){
-    if(this.innerWidth >991){
-        if(menu.classList.contains("active")){
-            toggleMenu();
+  // Toggle menu open/close
+  menuTrigger?.addEventListener("click", toggleMenu);
+  closeMenu?.addEventListener("click", toggleMenu);
+  overlay?.addEventListener("click", toggleMenu);
+
+  // Handle submenu toggle
+  menuMain?.addEventListener("click", (e) => {
+    const menuItem = e.target.closest(".menu-item-has-children");
+    const clickedLink = e.target.closest("a");
+
+    // If clicked outside a menu-item with children, skip
+    if (!menuItem) return;
+
+    // If submenu toggle (e.g. <a type="button">), prevent and toggle
+    if (clickedLink && (!clickedLink.getAttribute("href") || clickedLink.getAttribute("href") === "#")) {
+      e.preventDefault();
+
+      const isActive = menuItem.classList.contains("active");
+
+      // Close all other open submenus
+      menuMain.querySelectorAll(".menu-item-has-children.active").forEach((item) => {
+        if (item !== menuItem) {
+          item.classList.remove("active");
+          item.querySelector(".sub-menu")?.classList.remove("active");
+          item.querySelector("i")?.classList.replace("fa-angle-up", "fa-angle-down");
         }
+      });
+
+      // Toggle current submenu
+      menuItem.classList.toggle("active");
+      menuItem.querySelector(".sub-menu")?.classList.toggle("active");
+
+      // Toggle arrow icon
+      const icon = menuItem.querySelector("i");
+      if (icon) {
+        icon.classList.toggle("fa-angle-up", !isActive);
+        icon.classList.toggle("fa-angle-down", isActive);
+      }
     }
+    // Otherwise, allow default link navigation
+  });
+
+  // Auto-close menu on resize (for desktop)
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 991 && menu.classList.contains("active")) {
+      toggleMenu();
     }
+  });
+});
 </script>
 
 <script>
@@ -252,14 +261,6 @@ $('#select_industry').multiselect({
 <?php wp_footer(); ?>
 
 <script>
-/* document.addEventListener( 'wpcf7mailsent', function( event ) {
-if(event.detail.contactFormId == 2709){
-var redirect_link = "https://blueorange.digital/wp-content/uploads/2025/01/White_Paper_Driving_Real_Estate_Growth_Through_Data_Integration.pdf";
-}
-setTimeout( () => {
-window.open(redirect_link, '_blank');
-}, 10 ); // Wait for 3 seconds to redirect.
-}, false ); */
 document.addEventListener('wpcf7mailsent', function (event) {
 if (event.detail.contactFormId == 2709) {
 var download_link = "<?php echo $pdf_insight; ?>";

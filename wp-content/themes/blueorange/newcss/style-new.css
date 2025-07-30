@@ -365,8 +365,7 @@ input[type="search"]::-webkit-search-results-decoration {
 	}
 	.menu > ul > li {
 		display: inline-block;
-		padding: 0 25px;
-		cursor: pointer;
+		margin-left: 25px;
 	}
 	.menu > ul > li > a {
 		font-size: var(--bs-fs16);
@@ -646,7 +645,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 .video_sec {
     video {
-	    object-fit: contain;
+	    object-fit: cover;
 	    border-radius: 20px;
 	    cursor: pointer;
 	}
@@ -2212,4 +2211,17 @@ footer {
 .stand_logos {
     display: flex;
     gap: 1.5rem;
+}
+.wpcf7 form.sent .wpcf7-response-output {
+    border-color: transparent !important;
+    padding: 0 !important;
+}
+
+.fab_max_text {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	p {
+		max-width: 500px;
+	}
 }
