@@ -229,15 +229,21 @@ class FrontendProfileBuilder
     }
 
     /**
-     * Return user avatar image url
+     * Return the user avatar image URL
+     *
+     * @param array $atts Shortcode attributes
      *
      * @return string image url
      */
-    public function user_avatar_url()
+    public function user_avatar_url($atts)
     {
         $user_id = self::$user_data->ID;
 
-        return apply_filters('ppress_profile_avatar_url', get_avatar_url($user_id, ['ppress-full' => true]), self::$user_data);
+        $args = ['ppress-full' => true];
+
+        if ( ! empty($atts['size'])) $args['size'] = absint($atts['size']);
+
+        return apply_filters('ppress_profile_avatar_url', get_avatar_url($user_id, $args), self::$user_data);
     }
 
     /**
@@ -309,7 +315,7 @@ class FrontendProfileBuilder
      */
     public function profile_first_name()
     {
-        return apply_filters('ppress_profile_first_name', ucwords(self::$user_data->first_name), self::$user_data);
+        return apply_filters('ppress_profile_first_name', ucwords(strip_shortcodes(self::$user_data->first_name)), self::$user_data);
     }
 
 
@@ -320,7 +326,7 @@ class FrontendProfileBuilder
      */
     public function profile_last_name()
     {
-        return apply_filters('ppress_profile_last_name', ucwords(self::$user_data->last_name), self::$user_data);
+        return apply_filters('ppress_profile_last_name', ucwords(strip_shortcodes(self::$user_data->last_name)), self::$user_data);
     }
 
     /**
@@ -330,7 +336,7 @@ class FrontendProfileBuilder
      */
     public function profile_bio()
     {
-        return apply_filters('ppress_profile_bio', make_clickable(wpautop(wp_kses_post(html_entity_decode(self::$user_data->description)))), self::$user_data);
+        return apply_filters('ppress_profile_bio', make_clickable(wpautop(wp_kses_post(html_entity_decode(strip_shortcodes(self::$user_data->description))))), self::$user_data);
     }
 
     /**
@@ -376,7 +382,7 @@ class FrontendProfileBuilder
             $data = esc_attr($atts['default']);
         }
 
-        return apply_filters('ppress_profile_cpf', $data, self::$user_data);
+        return apply_filters('ppress_profile_cpf', strip_shortcodes($data), self::$user_data);
     }
 
     public static function get_user_uploaded_file($user_id, $field_key, $is_raw = false)
