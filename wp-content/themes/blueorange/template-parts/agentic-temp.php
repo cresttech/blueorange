@@ -12,12 +12,12 @@ get_header();
                 <div class="subtitle text-uppercase"><?php the_field('sub_heading_1'); ?></div>
                 <h1 class="text-uppercase text-white"><?php the_field('heading_1'); ?></h1>
                 <?php the_field('content_1'); 
-                if(get_field('button_text_1') != '') {
-                ?>
+				if(get_field('button_text_1') != '') {
+				?>
                 <div class="btn_block">
                     <a href="<?php the_field('button_link_1'); ?>" class="button orange_btn"><?php the_field('button_text_1'); ?> <i class="fa-solid fa-angle-right"></i></a>
                 </div>
-                <?php } ?>
+				<?php } ?>
             </div>
             <div class="col-md-5 col-lg-5 ml-auto logo_col text-center">
             </div>
@@ -47,19 +47,19 @@ get_header();
                 <div class="ws_list mt-4 mb-4 mb-lg-5">
                     <?php the_field('content_5'); ?>
                 </div>
-                <?php if(get_field('button_text_2') != '') { ?>
+				<?php if(get_field('button_text_2') != '') { ?>
                 <div class="btn_block">
                     <a href="<?php the_field('button_link_2'); ?>" class="button orange_btn"><?php the_field('button_text_2'); ?> <i class="fa-solid fa-angle-right"></i></a>
                 </div>
-                <?php } ?>
+				<?php } ?>
             </div>
             <div class="col-lg-9 image_col mt-4 mt-lg-0">
                 <div class="calendr__wrapper">
-                    <!-- Calendly inline widget begin -->
-                    <div class="calendly-inline-widget" data-url="https://calendly.com/adickson-blueorange/agentic-workflow-discovery" style="min-width:320px;height:700px;"></div>
-                    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-                    <!-- Calendly inline widget end -->
-                </div>
+	                <!-- Calendly inline widget begin -->
+					<div class="calendly-inline-widget" data-url="https://calendly.com/d/ckf5-ww7-nx7/free-consultation" style="min-width:320px;height:700px;"></div>
+					<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+					<!-- Calendly inline widget end -->
+				</div>
             </div>
         </div>
     </div>
@@ -72,8 +72,8 @@ get_header();
                 <h2 class="text-uppercase text_color mb-lg-0"><?php the_field('heading_3'); ?></h2>
             </div>
             <div class="col-lg-6 ml-auto content_col migrate_list">
-                <?php if( have_rows('content_3') ):
-                while ( have_rows('content_3') ) : the_row();   ?>
+				<?php if( have_rows('content_3') ):
+				while ( have_rows('content_3') ) : the_row();	?>
                 <div class="ds--item">
                     <div class="item--inner light_grey">
                         <div class="item--icon">
@@ -83,7 +83,7 @@ get_header();
                         <?php the_sub_field('text'); ?>
                     </div>
                 </div>
-                <?php endwhile; endif;?>
+				<?php endwhile; endif;?>
             </div>
         </div>
     </div>
@@ -102,23 +102,23 @@ get_header();
         <div class="case--tabs-wrapper row mt-5" data-aos="fade-up" data-aos-duration="2000">
             <div class="col-lg-5">
                 <ul class="nav nav-tabs" id="strategyTabs" role="tablist">
-                    <?php if( have_rows('services') ):
-                    $count = 0;
-                    while ( have_rows('services') ) : the_row();    ?>
+					<?php if( have_rows('services') ):
+					$count = 0;
+					while ( have_rows('services') ) : the_row();	?>
                     <li class="nav-item">
                         <a class="nav-link bo_progress_tab <?php if($count == 0) { echo 'active'; } ?>" data-toggle="tab" href="#Tab<?php echo $count; ?>" role="tab" data-index="<?php echo $count; ?>"><?php the_sub_field('title'); ?></a>
                         <div class="progress" data-index="<?php echo $count; ?>">
                             <div class="progress-bar tab-progress" id="progressBar<?php echo $count; ?>"></div>
                         </div>
                     </li>
-                    <?php $count++; endwhile; endif;?>
+					<?php $count++; endwhile; endif;?>
                 </ul>
             </div>
             <div class="col-lg-7">
                 <div class="tab-content" id="strategyTabContent">
-                    <?php if( have_rows('services') ):
-                    $count = 0;
-                    while ( have_rows('services') ) : the_row();    ?>
+					<?php if( have_rows('services') ):
+					$count = 0;
+					while ( have_rows('services') ) : the_row();	?>
                     <div class="tab-pane card <?php if($count == 0) { echo 'active'; } ?>" id="Tab<?php echo $count; ?>" role="tabpanel">
                         <div class="card-header" role="tab" id="tabheading-<?php echo $count; ?>">
                             <a class="" data-toggle="collapse" href="#collapse-<?php echo $count; ?>" aria-controls="collapse-<?php echo $count; ?>"><?php the_sub_field('title'); ?></a>
@@ -135,7 +135,7 @@ get_header();
                             </div>
                         </div>
                     </div>
-                    <?php $count++; endwhile; endif;?>
+					<?php $count++; endwhile; endif;?>
                 </div>
             </div>
         </div>
@@ -156,7 +156,7 @@ get_header();
         </div>
         <div class="casestudy--container" data-aos="fade-up" data-aos-duration="2000">
             <div class="casestudy-list row">
-                <?php
+				<?php
             $postidss = get_field('case_studies');
             //$postids = array(999, 1034, 1035 );
 
@@ -164,7 +164,7 @@ get_header();
             'post_type' => 'case-studies' , 
             "order" => "DESC", 
             'posts_per_page' => '-1',
-            'post__in' => $postidss,
+			'post__in' => $postidss,
             );
             $query = new WP_Query( $args ); 
             if ( $query->have_posts() ) :
@@ -173,24 +173,24 @@ get_header();
              //$featured_img_url = get_the_post_thumbnail_url(get_the_ID(),'full');
                 $featured_img = '';
                 if ( has_post_thumbnail() ) {
-                        $large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large');
-                        $featured_img = $large_image_url[0];
-                    } else {
-                        $default_mage = get_field('default_mage');
-                    }
-            $post__id = get_the_ID();
-            $taxonomies = get_the_terms( $post__id, 'case_studies_tags' );
-            $technology = get_the_terms( $post__id, 'technology_studies_tags' );
-            $industries = get_the_terms( $post__id, 'industries_studies_tags' );
+						$large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large');
+						$featured_img = $large_image_url[0];
+					} else {
+						$default_mage = get_field('default_mage');
+					}
+			$post__id = get_the_ID();
+			$taxonomies = get_the_terms( $post__id, 'case_studies_tags' );
+			$technology = get_the_terms( $post__id, 'technology_studies_tags' );
+			$industries = get_the_terms( $post__id, 'industries_studies_tags' );
             ?>
                 <div class="col-sm-6 list--item">
                     <a href="<?php the_permalink(); ?>" class="item--inner light_grey">
                         <div class="item--icon">
-                            <?php if(!empty($featured_img)) { ?>
-                                <img src="<?php echo $featured_img; ?>" alt="#" >
-                            <?php } else { 
-                                echo $default_mage;
-                            }  ?>
+							<?php if(!empty($featured_img)) { ?>
+								<img src="<?php echo $featured_img; ?>" alt="#" >
+							<?php } else { 
+								echo $default_mage;
+							}  ?>
                         </div>
                         <div class="p-3 p-lg-4">
                             <div class="servie_type text-uppercase"><?php if ( ! empty( $taxonomies ) && ! is_wp_error( $taxonomies ) ) {  $term_names = wp_list_pluck( $taxonomies, 'name' ); echo implode( ', ', $term_names ); echo ' • '; } if ( ! empty( $technology ) && ! is_wp_error( $technology ) ) {  $technology_names = wp_list_pluck( $technology, 'name' ); echo implode( ', ', $technology_names ); } if ( ! empty( $industries ) && ! is_wp_error( $industries ) ) { echo ' • ';  $industries_names = wp_list_pluck( $industries, 'name' ); echo implode( ', ', $industries_names ); } ?></div>
@@ -208,7 +208,7 @@ get_header();
                         </div>
                     </a>
                 </div>
-                <?php endwhile; endif;  wp_reset_postdata(); ?>
+				<?php endwhile; endif;  wp_reset_postdata(); ?>
             </div>
         </div>
         <div class="btn_block v_mobile">
