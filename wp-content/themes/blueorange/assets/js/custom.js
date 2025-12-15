@@ -265,3 +265,64 @@ jQuery('.team_testi_carousel').owlCarousel({
     }
     }
 });
+
+
+jQuery('.pe_service').owlCarousel({
+    loop: true,
+    margin: 0,
+    autoplay: false,
+    dots: false,
+    nav: true,
+    navText: ["<img src='/wp-content/uploads/2025/12/Arrow-left.svg'>", "<img src='/wp-content/uploads/2025/12/Arrow-right.svg'>"],
+    autoplayTimeout: 3500,
+    smartSpeed: 2000,
+    touchDrag: false,
+    mouseDrag: false,
+    responsiveClass: true,
+    responsive: {
+    0: {
+      items: 1,
+      margin: 0,
+      autoplay: false
+    },
+    768: {
+      items: 2,
+      margin: 15
+    },
+    1024: {
+      items: 3,
+      margin: 25
+    }
+    }
+});
+
+
+
+jQuery('.pe_why_blueorange').owlCarousel({
+    loop: true,
+    margin: '1rem',
+    autoplay: true,
+    dots: false,
+    nav: true,
+    navText: ["<img src='/wp-content/uploads/2025/12/Arrow-left.svg'>", "<img src='/wp-content/uploads/2025/12/Arrow-right.svg'>"],
+    autoplayTimeout: 3500,
+    smartSpeed: 2000,
+    touchDrag: false,
+    mouseDrag: false,
+    responsiveClass: true,
+    responsive: {
+    0: {
+      items: 1,
+      margin: 0,
+      autoplay: true
+    },
+    600: {
+      items: 2,
+      margin: 15
+    },
+    1024: {
+      items: 4,
+      margin: 25
+    }
+    }
+});

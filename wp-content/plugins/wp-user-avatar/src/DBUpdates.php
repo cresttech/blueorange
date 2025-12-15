@@ -10,7 +10,7 @@ class DBUpdates
 {
     public static $instance;
 
-    const DB_VER = 11;
+    const DB_VER = 13;
 
     public function init_options()
     {
@@ -174,6 +174,31 @@ class DBUpdates
 
         if (empty($linkedin_api_version)) {
             ppress_update_settings('linkedin_api_version', 'deprecated');
+        }
+    }
+
+    public function update_routine_12()
+    {
+        global $wpdb;
+
+        $table = DBTables::passwordless_login_db_table();
+
+        // because this db updated might trigger if pro plugin isn't active, i had to also ensure the schema change below
+        // was added to the CREATE table definition in the pro plugin folder/archive to ensure the update is always present
+        // this will take care of for when a site already has pro and lite plugins active
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table))) {
+            $wpdb->query("ALTER TABLE $table CHANGE id id bigint(20) unsigned NOT NULL AUTO_INCREMENT;");
+            $wpdb->query("ALTER TABLE $table CHANGE user_id user_id bigint(20) unsigned NOT NULL;");
+        }
+    }
+
+    public function update_routine_13()
+    {
+        $db = get_option(ExtensionManager::DB_OPTION_NAME, []);
+
+        if (in_array('true', [ppress_var($db, 'join_buddypress_groups'), ppress_var($db, 'buddypress_sync')])) {
+            $db['buddypress'] = 'true';
+            update_option(ExtensionManager::DB_OPTION_NAME, $db);
         }
     }
 

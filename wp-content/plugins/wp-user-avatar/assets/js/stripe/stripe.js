@@ -44,24 +44,32 @@
         };
 
         this.getBillingDetails = function () {
-            return {
-                name: _this.fieldValueOrEmpty($('#stripe-card_name').val()),
-                email: _this.fieldValueOrEmpty($('#ppmb_email').val()),
-                phone: _this.fieldValueOrEmpty($('#stripe_ppress_billing_phone').val()),
-                address: {
+            var country = $('#stripe_ppress_billing_country').val(),
+                state = $('#stripe_ppress_billing_state').val(),
+                val = {
+                    name: _this.fieldValueOrEmpty($('#stripe-card_name').val()),
+                    email: _this.fieldValueOrEmpty($('#ppmb_email').val()),
+                    phone: _this.fieldValueOrEmpty($('#stripe_ppress_billing_phone').val())
+                };
+
+            // only include address to billing details if the billing address fields are in the checkout form
+            if (country) {
+                val.address = {
                     line1: _this.fieldValueOrEmpty($('#stripe_ppress_billing_address').val()),
                     line2: '',
                     city: _this.fieldValueOrEmpty($('#stripe_ppress_billing_city').val()),
-                    state: _this.fieldValueOrEmpty($('#stripe_ppress_billing_state').val()),
-                    country: _this.fieldValueOrEmpty($('#stripe_ppress_billing_country').val()),
+                    state: _this.fieldValueOrEmpty(state),
+                    country: _this.fieldValueOrEmpty(country),
                     postal_code: _this.fieldValueOrEmpty($('#stripe_ppress_billing_postcode').val()),
                 }
-            };
+            }
+
+            return val;
         };
 
         this.updatePaymentElement = function () {
 
-            let callback = function () {
+            var callback = function () {
 
                 _this.unmountPaymentElement();
 
@@ -76,18 +84,25 @@
         };
 
         this.getPaymentOptions = function () {
-            return {
+            var obj = {
                 layout: {type: 'tabs'},
                 fields: {
                     billingDetails: ppress_stripe_vars.hideBillingFields === 'true' ? 'never' : 'auto'
-                },
-                defaultValues: {
-                    billingDetails: _this.getBillingDetails()
                 },
                 terms: {
                     card: 'never'
                 }
             };
+
+            // [Fix] Passing "never" for fields.billingDetails in combination with defaultValues.billingDetails is not recommended.
+            // Instead pass billing_details when creating the payment method or confirming the payment.
+            if (obj.fields.billingDetails === 'auto') {
+                obj.defaultValues = {
+                    billingDetails: _this.getBillingDetails()
+                };
+            }
+
+            return obj;
         };
 
         this.mountPaymentElement = function (response) {
@@ -143,7 +158,7 @@
 
                         window.confirmPaymentFlag = true;
 
-                        let client_secret, stripeAction = 'confirmPayment', actionResultParam = 'paymentIntent';
+                        var client_secret, stripeAction = 'confirmPayment', actionResultParam = 'paymentIntent';
 
                         if (ppressCheckoutForm.is_var_defined(response.gateway_response.client_secret)) {
                             client_secret = response.gateway_response.client_secret;
@@ -166,7 +181,7 @@
                             window.location.assign(response.order_success_url);
                         }
 
-                        let cp_getBillingDetails = _this.getBillingDetails();
+                        var cp_getBillingDetails = _this.getBillingDetails();
 
                         stripe[stripeAction]({
                             elements: window.elements,
