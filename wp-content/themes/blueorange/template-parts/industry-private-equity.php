@@ -35,352 +35,273 @@ get_header();
         </div>
     </div>
 </section>
-<section class="tailored_innovation wi_full py_3">
-    <div class="container-xxl">
-        <div class="row flex-lg-row-reverse align-items-center" data-aos="fade-up" data-aos-duration="1500">
-            <div class="col-lg-6 title_col light_grey">
-                <div class="subtitle text-uppercase"><?php the_field('sub_heading_2'); ?></div>
-                <h2 class="text-uppercase text_color"><?php the_field('heading_2'); ?></h2>
-                <?php the_field('content_2'); ?>
-                <div class="btn_block">
-                    <a href="<?php the_field('button_link_2'); ?>" class="button orange_btn"><?php the_field('button_text_2'); ?> <i class="fa-solid fa-angle-right"></i></a>
-                    <a href="<?php the_field('button_link_4'); ?>" class="button border_btn ml-3"><?php the_field('button_text_4'); ?> <i class="fa-solid fa-angle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-6 image_col mt-4 mt-lg-0">
-                <img src="<?php the_field('image_1'); ?>" class="w-100">
-            </div>
-        </div>
-    </div>
-</section>
-<section class="overview_blueorange payment_future wi_full">
-    <div class="container-xxl">
-        <div class="sec_bgimg" style="background-image: url(<?php bloginfo('template_url') ?>/newimages/pattern-bg-overview.svg), linear-gradient(to bottom, #192C47, #1B375F);" data-aos="fade-up" data-aos-duration="1500">
-            <div class="overview--wrapper overview_why_blueornge">
-                <div class="row align-items-end">
-                    <div class="col-lg-5 title_col">
-                        <div class="subtitle text-uppercase light_blue"><?php the_field('sub_heading_3'); ?></div>
-                        <h2 class="text-uppercase text-white"><?php the_field('heading_3'); ?></h2>
-                    </div>
-                    <div class="col-lg-6 ml-auto content_col light_blue">
-                        <?php the_field('content_3'); ?>
-                    </div>
-                </div>
-                <div class="why-bo-list row mt-1">
-					<?php if( have_rows('content_4_1') ):
-					while ( have_rows('content_4_1') ) : the_row();	?>
-                    <div class="list--item">
-                        <div class="item--inner light_blue">
-                            <span class="item--icon">
-                                <img src="<?php the_sub_field('icon'); ?>" class="ico_msg">
-                            </span>
-                            <h4 class="text-white"><?php the_sub_field('title'); ?></h4>
-                            <?php the_sub_field('content'); ?>
-                        </div>
-                    </div>
-					<?php endwhile; endif;?>
-                </div>
-                <div class="pymnt_futur_growth row align-items-center mt-5">
-                    <div class="col-md-6 text_col light_blue">
-                        <div class="subtitle text-uppercase"><?php the_field('sub_heading_4_o'); ?></div>
-                        <h2 class="text-uppercase text-white"><?php the_field('heading_4_o'); ?></h2>
-                        <?php the_field('content_5'); ?>
-                    </div>
-                    <div class="col-md-6 video_col mt-3 mt-md-0">
-                        <div class="illustration__wrapper">
-                            <!-- <img src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/uploads/2025/05/Private-Equity-graphic.png" class="w-100"> -->
-
-                            <div class="py-4 px-sm-4 px-2 outer-animate-box" style='background: rgb(33 67 110 / 25%);'>
-                                <div class="position-relative animate-box" style='padding: 23% 10%;'>
-                                    <img class="left-img1" style='position:absolute; top:0%; left:0;'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/left1.svg"
-                                        alt="">
-                                    <img class="left-img2" style='position:absolute; top:25%; left:0; transform: translateY(-25%);'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/left2.svg"
-                                        alt="">
-                                    <img class="left-img3" style='position:absolute; top:50%; left:0; transform: translateY(-50%);'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/left3.svg"
-                                        alt="">
-                                    <img class="left-img4" style='position:absolute; top:75%; left:0; transform: translateY(-75%);'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/left4.svg"
-                                        alt="">
-                                    <img class="left-img5" style='position:absolute; top:100%; left:0; transform: translateY(-100%);'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/left5.svg"
-                                        alt="">
-                                    
-                                        
-                                    <img class="center-img" 
-                                    style="transform: translateY(3px)"
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/center.svg"
-                                        alt="">
-
-                                        
-                                    <img class="right-img1" style='position:absolute; top:0%; right:0;'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/right1.svg"
-                                        alt="">
-                                    <img class="right-img2" style='position:absolute; top:50%; right:0; transform: translateY(-50%);'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/right2.svg"
-                                        alt="">
-                                    <img class="right-img3" style='position:absolute; top:100%; right:0; transform: translateY(-100%);'
-                                        src="https://stg-blueorangev2-staging.kinsta.cloud/wp-content/themes/blueorange/newimages/right3.svg"
-                                        alt="">
-
-                                    <svg id="svg-lines"
-                                        style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <defs>
-                                            <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                <stop offset="0%" stop-color="#f7b733" stop-opacity="0" />
-                                                <stop offset="100%" stop-color="#f7b733" stop-opacity="1" />
-                                            </linearGradient>
-                                            <linearGradient id="gradientStrokeReverse" x1="100%" y1="0%" x2="0%" y2="0%">
-                                                <stop offset="0%" stop-color="#f7b733" stop-opacity="0" />
-                                                <stop offset="100%" stop-color="#f7b733" stop-opacity="1" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path id="path1" class="path1" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <path id="path2" class="path1" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <path id="path3" class="path1" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <path id="path4" class="path1" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <path id="path5" class="path1" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-
-                                        <path id="path6" class="path2" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <path id="path7" class="path2" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <path id="path8" class="path2" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" />
-                                        <!-- <path id="path9" class="center-path" stroke="url(#gradientStroke)" stroke-width="4"
-                                            fill="none" /> -->
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="service_sec wi_full py_3">
-    <div class="container-xxl">
-        <div class="row align-items-end" data-aos="fade-up" data-aos-duration="2000">
-            <div class="col-lg-5 title_col light_grey">
-                <div class="subtitle text-uppercase"><?php the_field('sub_heading_4'); ?></div>
-                <h2 class="text-uppercase text_color"><?php the_field('heading_4'); ?></h2>
-            </div>
-            <div class="col-lg-6 ml-auto content_col light_grey">
-                <?php the_field('content_6'); ?>
-            </div>
-        </div>
-        <div class="services_list_container" data-aos="fade-up" data-aos-duration="2500">
-			<?php if( have_rows('content_7') ):
-			 $counte = 1;
-			while ( have_rows('content_7') ) : the_row();	?>
-            <div class="service--item">
-                <div class="item--inner">
-                    <div class="item--title">
-                        <div class="item--count light_grey">0<?php echo $counte; ?></div>
-                        <h4 class="mb-0 text_color"><?php the_sub_field('title'); ?></h4>
-                    </div>
-                    <div class="item--content light_grey">
-                        <?php the_sub_field('text'); ?>
-                    </div>
-                </div>
-            </div>
-			<?php $counte++; endwhile; endif;?>
-        </div>
-    </div>
-</section>
-<section class="excellence_growth wi_full py_3">
+<section class="data_services wi_full py_3 pe_firm_face">
     <div class="container-xxl">
         <div class="row align-items-end" data-aos="fade-up" data-aos-duration="1500">
             <div class="col-lg-5 title_col">
-                <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_5'); ?></div>
-                <h2 class="text-uppercase text_color"><?php the_field('heading_5'); ?></h2>
-            </div>
-            <div class="col-lg-6 ml-auto content_col light_grey">
-                <?php the_field('content_8'); ?>
-            </div>
-        </div>
-        <div class="growth_timeline row mt-4" data-aos="fade-up" data-aos-duration="2500">
-            <div class="col-lg-6 img_col mb-3 mb-lg-0">
-                <img src="<?php the_field('image_2'); ?>" class="w-100">
-            </div>
-            <div class="col-lg-6 timeline_col">
-                <div class="timeline_process position-relative">
-                    <div class="progress-line"></div>
-                    <div class="timeline_steps">
-						<?php if( have_rows('content_9') ):
-						while ( have_rows('content_9') ) : the_row();	?>
-                        <div class="tl_item">
-                            <h4><?php the_sub_field('title'); ?></h4>
-                            <p><?php the_sub_field('text'); ?></p>
-                        </div>
-						<?php endwhile; endif;?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="success_leader wi_full py_3" style="background-image: url(<?php bloginfo('template_url') ?>/newimages/pattern-bg-overview.svg), linear-gradient(to bottom, #192C47, #1B375F);">
-    <div class="container-xxl">
-        <div class="row align-items-end">
-            <div class="col-lg-6 title_col">
-                <div class="subtitle text-uppercase light_blue"><?php the_field('sub_heading_6'); ?></div>
-                <h2 class="text-uppercase text-white"><?php the_field('heading_6'); ?></h2>
-            </div>
-            <div class="col-lg-6 content_col light_blue">
-                <?php the_field('content_10'); ?>
-            </div>
-        </div>
-        <div class="sl_list_row row mt-3">
-			<?php if( have_rows('content_11') ):
-			while ( have_rows('content_11') ) : the_row();	?>
-            <div class="col-md-4 list--item">
-                <div class="item--inner light_blue">
-                    <h4 class="text-white"><?php the_sub_field('title'); ?></h4>
-                    <p><?php the_sub_field('text'); ?></p>
-                </div>
-            </div>
-			<?php endwhile; endif;?>
-        </div>
-    </div>
-</section>
-<section class="why_partnering_bo wi_full py_3">
-    <div class="container-xxl">
-        <div class="row align-items-end" data-aos="fade-up" data-aos-duration="1500">
-            <div class="col-lg-4 title_col">
-                <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_8'); ?></div>
-                <h2 class="text-uppercase text_color"><?php the_field('heading_8'); ?></h2>
-            </div>
-            <div class="col-lg-6 ml-auto content_col light_grey">
-                <?php the_field('content_12'); ?>
+                <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_3'); ?></div>
+                <h2 class="text-uppercase text_color"><?php the_field('heading_3'); ?></h2>
             </div>
         </div>
         <div class="data_service_list row" data-aos="fade-up" data-aos-duration="2000">
-			<?php if( have_rows('content_13') ):
-			while ( have_rows('content_13') ) : the_row();	?>
+            <?php if( have_rows('content_4_1') ):
+			while ( have_rows('content_4_1') ) : the_row();	?>
             <div class="col-sm-6 col-lg-3 ds--item">
                 <div class="item--inner light_grey">
-                    <div class="item--icon">
-                        <img src="<?php the_sub_field('icon'); ?>" alt="#">
-                    </div>
+                    <img src="<?php the_sub_field('icon'); ?>" alt="#" width="35px" class="mb-3" />
                     <h4 class="text_color"><?php the_sub_field('title'); ?></h4>
-                    <?php the_sub_field('text'); ?>
+                    <?php the_sub_field('content'); ?>
                 </div>
             </div>
-			<?php endwhile; endif;?>
+            <?php endwhile; endif;?>
         </div>
     </div>
 </section>
-<section class="client_reported wi_full py_3">
+<section class="overview_blueorange pe_alue_model wi_full">
     <div class="container-xxl">
-        <div class="row align-items-end">
-            <div class="col-lg-6 title_col">
-                <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_9'); ?></div>
-                <h2 class="text-uppercase text_color"><?php the_field('heading_9'); ?></h2>
-            </div>
-            <div class="col-lg-6 content_col light_grey">
-                <?php the_field('content_14'); ?>
-            </div>
-        </div>
-        <hr />
-        <div class="cr_list_row row mt-3">
-			<?php if( have_rows('content_15') ):
-			while ( have_rows('content_15') ) : the_row();	?>
-            <div class="list--item">
-                <div class="item--inner light_grey">
-                    <h2 class="text_color m-0"><?php the_sub_field('title'); ?></h2>
-                    <h4 class="text_color"><?php the_sub_field('sub_title'); ?></h4>
-                    <?php the_sub_field('text'); ?>
-                </div>
-            </div>
-			<?php endwhile; endif;?>
-        </div>
-    </div>
-</section>
-<section class="casestudy_sec wi_full py_3">
-    <div class="container-xxl">
-        <div class="row align-items-end" data-aos="fade-up" data-aos-duration="1500">
-            <div class="col-sm-8 title_col">
-                <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_7'); ?></div>
-                <h2 class="text-uppercase text_color mb-0"><?php the_field('heading_7'); ?></h2>
-            </div>
-            <div class="col-sm-4 content_col light_grey">
-                <div class="btn_block justify-content-end v_dsktop">
-                    <a href="<?php the_field('button_link_3'); ?>" class="button border_btn"><?php the_field('button_text_3'); ?></a>
-                </div>
-            </div>
-        </div>
-        <div class="casestudy--container" data-aos="fade-up" data-aos-duration="2000">
-            <div class="casestudy-list row">
-				<?php
-            $postidss = get_field('case_studies');
-            //$postids = array(999, 1034, 1035 );
-
-            $args = array(
-            'post_type' => 'case-studies' , 
-            "order" => "DESC", 
-            'posts_per_page' => '-1',
-			'post__in' => $postidss,
-            );
-            $query = new WP_Query( $args ); 
-            if ( $query->have_posts() ) :
-            while ( $query->have_posts() ) : 
-            $query->the_post();
-             //$featured_img_url = get_the_post_thumbnail_url(get_the_ID(),'full');
-                $featured_img = '';
-                if ( has_post_thumbnail() ) {
-						$large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large');
-						$featured_img = $large_image_url[0];
-					} else {
-						$default_mage = get_field('default_mage');
-					}
-			$post__id = get_the_ID();
-			$taxonomies = get_the_terms( $post__id, 'case_studies_tags' );
-			$technology = get_the_terms( $post__id, 'technology_studies_tags' );
-			$industries = get_the_terms( $post__id, 'industries_studies_tags' );
-            ?>
-                <div class="col-sm-6 list--item">
-                    <a href="<?php the_permalink(); ?>" class="item--inner light_grey">
-                        <div class="item--icon">
-							<?php if(!empty($featured_img)) { ?>
-								<img src="<?php echo $featured_img; ?>" alt="#" >
-							<?php } else { 
-								echo $default_mage;
-							}  ?>
+        <div class="sec_bgimg" style="background-image: url(<?php bloginfo('template_directory'); ?>/assets/newimages/pattern-bg-overview.svg), linear-gradient(to bottom, #192C47, #1B375F);" data-aos="fade-up" data-aos-duration="1500">
+            <div class="overview--wrapper">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 title_col light_blue">
+                        <div class="subtitle text-uppercase light_blue"><?php the_field('sub_heading_4'); ?></div>
+                        <h2 class="text-uppercase text-white"><?php the_field('heading_4'); ?></h2>
+                        <?php the_field('content_6'); ?>
+                        <div class="model_creation row">
+                            <?php if( have_rows('content_7') ):
+			                while ( have_rows('content_7') ) : the_row();	?>
+                            <div class="col-sm-6 list--item">
+                                <div class="item--inner light_blue">
+                                    <img src="<?php echo site_url(); ?>/wp-content/uploads/2025/12/tick-icon.svg" alt="#" width="35px" class="mb-3" />
+                                    <h4 class="text-white"><?php the_sub_field('title'); ?></h4>
+                                    <?php the_sub_field('text'); ?>
+                                </div>
+                            </div>
+                            <?php endwhile; endif;?>
                         </div>
-                        <div class="p-3 p-lg-4">
-                            <div class="servie_type text-uppercase"><?php if ( ! empty( $taxonomies ) && ! is_wp_error( $taxonomies ) ) {  $term_names = wp_list_pluck( $taxonomies, 'name' ); echo implode( ', ', $term_names ); echo ' • '; } if ( ! empty( $technology ) && ! is_wp_error( $technology ) ) {  $technology_names = wp_list_pluck( $technology, 'name' ); echo implode( ', ', $technology_names ); } if ( ! empty( $industries ) && ! is_wp_error( $industries ) ) { echo ' • ';  $industries_names = wp_list_pluck( $industries, 'name' ); echo implode( ', ', $industries_names ); } ?></div>
-                            <h4 class="text_color mt-3"><?php the_title(); ?></h4>
-                            <?php
-                              $excerpt       = get_the_excerpt();
-                              $excerpt       = substr( $excerpt, 0, 300 );
-                              $short_excerpt = substr( $excerpt, 0, strrpos( $excerpt, ' ' ) );
-                              if ( ! empty( $short_excerpt ) ) { ?>
-                                    <p><?php echo esc_html( $short_excerpt ); ?>&hellip;</p>
-                           <?php } ?>
-                            <div class="btn_block mt-3">
-                                <span class="cursor-pointer button blue_btn text-white">Learn more <i class="fa-solid fa-angle-right"></i></span>
+                    </div>
+                    <div class="col-lg-5 medel_img_col">
+                        <img src="<?php the_field('image_3'); ?>" class="w-100 mt-4 mt-lg-0" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="service_built_pe wi_full py_3 secbg_lite_blue">
+    <div class="container-xxl">
+        <div class="title_col" data-aos="fade-up" data-aos-duration="1500">
+            <div class="subtitle text-uppercase light_grey"><?php the_field('heading_5'); ?></div>
+            <h2 class="text-uppercase text_color"><?php the_field('sub_heading_5'); ?></h2>
+        </div>
+        <div class="slider_wrapper mt-5">
+            <div class="pe_service owl-carousel">
+                <?php if( have_rows('content_9') ):
+			    while ( have_rows('content_9') ) : the_row();	?>
+                <div class="item light_grey">
+                    <div class="icon--btn mb-4">
+                        <span class="item--icon d-flex align-items-center">
+                            <img src="<?php the_sub_field('icon'); ?>">
+                        </span>
+                    </div> 
+                    <h4 class="mb-3 text-orange"><?php the_sub_field('title'); ?></h4>
+                    <h5 class="text_color"><?php the_sub_field('sub_title'); ?></h5>
+                    <p><?php the_sub_field('text'); ?></p>
+                </div>
+                <?php endwhile; endif;?>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="how_we_partner_pe wi_full py_3">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="how_we_partner_pe_heading text-white"><?php the_field('heading_6'); ?></h2>
+            <?php the_field('content_10'); ?>
+            <div class="timeline_col">
+                <div class="timeline_process position-relative">
+                    <div class="progress-line"></div>
+                    <div class="timeline_steps">
+                        <?php if( have_rows('content_11') ):
+                        $count = 1;
+			            while ( have_rows('content_11') ) : the_row();	?>
+                        <div class="tl_item">
+                            <div class="inner_tl_item">
+                                <h3><span>0<?php echo $count; ?></span> <img src="<?php the_sub_field('icon'); ?>"></h3>
+                                <h4><?php the_sub_field('title'); ?></h4>
+                                <p><?php the_sub_field('text'); ?></p>
                             </div>
                         </div>
-                    </a>
+                        <?php $count++; endwhile; endif;?>
+                    </div>
                 </div>
-				<?php endwhile; endif;  wp_reset_postdata(); ?>
             </div>
-        </div>
-        <div class="btn_block v_mobile">
-            <a href="<?php the_field('button_link_3'); ?>" class="button border_btn"><?php the_field('button_text_3'); ?></a>
         </div>
     </div>
 </section>
+
+<section class="case_study wi_full py_3 pe_case_study_sec">
+    <div class="container-xxl">
+        <div class="title_col" data-aos="fade-up" data-aos-duration="1500">
+            <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_7'); ?></div>
+            <!-- <h2 class="text-uppercase text_color">Services Built for PE <br />Value Creation</h2> -->
+        </div>
+
+        <div class="row justify-content-between row_space">
+            <div class="col-lg-6">
+                <div class="case_study_content">
+                    <div class="row justify-content-between align-items-center mb-4">
+                        <div class="col-8">
+                            <h2><?php the_field('heading_7'); ?></h2>
+                        </div>
+                        <div class="col-4">
+                            <img src="<?php the_field('image_4'); ?>" alt="">
+                        </div>
+                    </div>
+                    <?php if( have_rows('content_16') ):
+			        while ( have_rows('content_16') ) : the_row();	?>
+                    <div class="mb-4 light_grey">
+                        <h5 class="text_color"><?php the_sub_field('title'); ?></h5>
+                        <p><?php the_sub_field('text'); ?></p>
+                    </div>
+                    <?php endwhile; endif;?>
+                    <div class="case_study_inner_content">
+                        <div class="case_study_results">
+                            <h4 class="text-white"><?php the_field('heading_10'); ?></h4>
+                            <ul>
+                                <?php if( have_rows('content_17') ):
+			                    while ( have_rows('content_17') ) : the_row();	?>
+                                <li class="text-white"><span class="text-orange"><?php the_sub_field('title'); ?></span> <?php the_sub_field('text'); ?></li>
+                                <?php endwhile; endif;?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="accordion case-accordion-x" id="caseAccordionX">
+                <!-- Item 1 - OPEN BY DEFAULT -->
+                 <?php if( have_rows('content_18') ):
+                 $count = 1;
+                while ( have_rows('content_18') ) : the_row();	?>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="caseXHeading<?php echo $count; ?>">
+                        <button class="accordion-button collapsed <?php //if($count != 1) { echo 'collapsed'; } ?>" type="button" data-toggle="collapse" data-target="#caseXCollapse<?php echo $count; ?>" aria-controls="caseXCollapse<?php echo $count; ?>">
+                            <span><?php the_sub_field('title'); ?></span>
+                            <?php if(get_sub_field('logo') != '') { ?>
+                                <img src="<?php the_sub_field('logo'); ?>" alt="">
+                            <?php } ?>
+                        </button>
+                    </h2>
+                    <div id="caseXCollapse<?php echo $count; ?>" class="accordion-collapse collapse <?php //if($count == 1) { echo 'show'; } ?>" aria-labelledby="caseXHeading<?php echo $count; ?>" data-parent="#caseAccordionX">
+                        <div class="accordion-body">
+                            <p class="light_grey"><?php the_sub_field('text'); ?></p>
+                            <div class="result_box">
+                                <?php the_sub_field('results'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php $count++; endwhile; endif;?>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="beyond_automation py_3" style="background: #F2F6F9;">
+    <div class="container">
+        <div class="image_sec">
+            <div class="subtitle text-uppercase light_grey"><?php the_field('sub_heading_8'); ?></div>
+            <h2><?php the_field('heading_8'); ?></h2>
+            <div class="text-center">
+                <img src="<?php the_field('image_5'); ?>" class="mt-4 mt-lg-0" />
+            </div>
+        </div>
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <img src="<?php the_field('image_6'); ?>" class="w-100 mb-4 mb-lg-0" />
+            </div>
+            <div class="col-lg-6">
+                <div class="accordion" id="accordionExample">
+                    <?php if( have_rows('content_19') ):
+                     $count = 1;
+                     while ( have_rows('content_19') ) : the_row();	?>
+                    <div class="accordion-item accordion-item1">
+                        <h3 class="accordion-header">
+                            <span class="subtitle text-uppercase light_grey">0<?php echo $count; ?></span> 
+                        <button class="accordion-button <?php if($count != 1) { echo 'collapsed'; } ?>" type="button" data-toggle="collapse" data-target="#collapse<?php echo $count; ?>" aria-expanded="true" aria-controls="collapse<?php echo $count; ?>">
+                            <?php the_sub_field('heading'); ?>
+                        </button>
+                        </h3>
+                        <div id="collapse<?php echo $count; ?>" class="accordion-collapse collapse <?php if($count == 1) { echo 'show'; } ?>" data-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <h3 class="text_blue"><?php the_sub_field('title'); ?></h3>
+                            <div class="subtitle light_grey"><?php the_sub_field('text'); ?></div>
+                        </div>
+                        </div>
+                    </div>
+                     <?php $count++; endwhile; endif;?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="why_bdigital_pe wi_full">
+    <div class="sec_bgimg py_3" style="background-image: url(<?php echo site_url(); ?>/wp-content/uploads/2025/05/illustration-assessment-strategy.svg), linear-gradient(to bottom, #192C47, #1B375F); border-radius: 25px; background-size: cover;background-position: center;background-repeat: no-repeat;" data-aos="fade-up" data-aos-duration="1500">
+        <div class="container-xxl">
+            <div class="title_col" data-aos="fade-up" data-aos-duration="1500">
+                <h2 class="text-uppercase text-white"><?php the_field('heading_9'); ?></h2>
+            </div>
+            <div class="slider_wrapper mt-5">
+                <div class="pe_why_blueorange owl-carousel">
+                    <?php if( have_rows('content_15') ):
+                    while ( have_rows('content_15') ) : the_row();?>	
+                    <div class="item light_grey">
+                        <h4 class="mb-3 text-orange"><?php the_sub_field('title'); ?></h4>
+                        <?php the_sub_field('text'); ?>
+                    </div>
+                    <?php endwhile; endif;?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ready_to_drive py_3" style="background: #F2F6F9;">
+    <div class="container">
+        <div class="portfolio_info">
+            <div class="d-flex justify-content-center mb-5 flex-wrap">
+                <?php if( have_rows('counter') ):
+                $count = 1;
+                while ( have_rows('counter') ) : the_row();?>
+                <div class="col-items light_grey">
+                    <h2 class="text_color"><span class="countss"><?php the_sub_field('title'); ?></span><?php if($count < 3) { echo '+'; } ?></h2>
+                    <p><?php the_sub_field('text'); ?></p>
+                </div>
+                <?php $count++; endwhile; endif;?>
+            </div>
+        </div>
+
+        <div class="row align-items-center" style="background: #fff; border-radius: 22px;">
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="ready_to_drive_inner px-lg-5">
+                    <h2 class="mb-4"><?php the_field('heading_11'); ?></h2>
+                    <div class="subtitle text-uppercase light_grey mb-4"><?php the_field('content_20'); ?></div> 
+                    <a href="<?php the_field('button_link_2'); ?>" class="button blue_btn"><?php the_field('button_text_2'); ?></a>
+                </div>
+            </div>
+            <div class="col-lg-6 pr-0">
+                <img src="<?php the_field('image_7'); ?>" class="w-100 mt-4 mt-lg-0" />
+            </div>
+        </div>
+    </div>
+</section>
+
 </div>
 <?php get_footer(); ?>
 
@@ -432,7 +353,7 @@ $(document).ready(function () {
     $(window).scroll(function () {
         if (isAlreadyRun) return;
 
-        $('.client_reported').each(function () {
+        $('.ready_to_drive').each(function () {
             var bottom_of_object = $(this).offset().top + $(this).outerHeight() / 2;
             var bottom_of_window = $(window).scrollTop() + $(window).height();
 
